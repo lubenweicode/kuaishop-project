@@ -1,0 +1,54 @@
+# 应用程序配置
+spring:
+  application:
+    name: demo-application
+
+  # 数据源配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/quickshop?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: root123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # JPA配置
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+  # 日志配置
+  output:
+    ansi:
+      enabled: always
+
+# 服务器配置
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1
+
+# 日志配置
+logging:
+  level:
+    root: INFO
+    com.example: DEBUG
+  file:
+    name: logs/application.log
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx"
+
+
+mybatis-plus:
+  # 实体类别名包（按需配置）
+  type-aliases-package: generator.domain.entity
+  # 开启驼峰命名转换（默认开启）
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+jwt:
+  expire: 3600000  # JWT过期时间（1小时，注意：原配置的3600*1000在yml中不会自动计算，需直接写数值）
+  sign-key: uNivjsEvr9aUNhpKahuChoGmsjaOdYSB   # JWT签名密钥（至少32字符/256位）
