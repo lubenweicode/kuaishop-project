@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import java.util.Date;
 * 商品分类表
 * @TableName product_category
 */
+@Data
 public class ProductCategory implements Serializable {
 
     /**
@@ -73,146 +75,5 @@ public class ProductCategory implements Serializable {
     */
     @ApiModelProperty("更新时间")
     private Date updateTime;
-
-    /**
-    * 分类ID
-    */
-    private void setId(Long id){
-    this.id = id;
-    }
-
-    /**
-    * 分类名称
-    */
-    private void setName(String name){
-    this.name = name;
-    }
-
-    /**
-    * 父分类ID，0表示一级分类
-    */
-    private void setParentId(Long parentId){
-    this.parentId = parentId;
-    }
-
-    /**
-    * 分类层级：1-一级分类 2-二级分类
-    */
-    private void setLevel(Integer level){
-    this.level = level;
-    }
-
-    /**
-    * 分类图标（可存图标URL或emoji）
-    */
-    private void setIcon(String icon){
-    this.icon = icon;
-    }
-
-    /**
-    * 排序值，越小越靠前
-    */
-    private void setSortOrder(Integer sortOrder){
-    this.sortOrder = sortOrder;
-    }
-
-    /**
-    * 状态：0-禁用 1-启用
-    */
-    private void setStatus(Integer status){
-    this.status = status;
-    }
-
-    /**
-    * 分类描述
-    */
-    private void setDescription(String description){
-    this.description = description;
-    }
-
-    /**
-    * 创建时间
-    */
-    private void setCreateTime(Date createTime){
-    this.createTime = createTime;
-    }
-
-    /**
-    * 更新时间
-    */
-    private void setUpdateTime(Date updateTime){
-    this.updateTime = updateTime;
-    }
-
-
-    /**
-    * 分类ID
-    */
-    private Long getId(){
-    return this.id;
-    }
-
-    /**
-    * 分类名称
-    */
-    private String getName(){
-    return this.name;
-    }
-
-    /**
-    * 父分类ID，0表示一级分类
-    */
-    private Long getParentId(){
-    return this.parentId;
-    }
-
-    /**
-    * 分类层级：1-一级分类 2-二级分类
-    */
-    private Integer getLevel(){
-    return this.level;
-    }
-
-    /**
-    * 分类图标（可存图标URL或emoji）
-    */
-    private String getIcon(){
-    return this.icon;
-    }
-
-    /**
-    * 排序值，越小越靠前
-    */
-    private Integer getSortOrder(){
-    return this.sortOrder;
-    }
-
-    /**
-    * 状态：0-禁用 1-启用
-    */
-    private Integer getStatus(){
-    return this.status;
-    }
-
-    /**
-    * 分类描述
-    */
-    private String getDescription(){
-    return this.description;
-    }
-
-    /**
-    * 创建时间
-    */
-    private Date getCreateTime(){
-    return this.createTime;
-    }
-
-    /**
-    * 更新时间
-    */
-    private Date getUpdateTime(){
-    return this.updateTime;
-    }
 
 }

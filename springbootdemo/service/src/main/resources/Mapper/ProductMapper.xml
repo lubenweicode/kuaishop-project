@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.ProductMapper">
+
+    <!-- 通用查询结果映射 -->
+    <resultMap id="ProductResultMap" type="generator.domain.Entity.Product">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="price" property="price"/>
+        <result column="sales" property="sales"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <!-- 其他字段根据你的 Product 实体类补充 -->
+    </resultMap>
+
+    <!-- 动态条件查询商品列表 -->
+    <select id="selectByCondition" parameterType="generator.domain.product.ProductDTO" resultMap="ProductResultMap">
+        SELECT
+        id, name, price, sales, category_id, create_time, update_time
+        FROM
+        product
+        <where>
+            <!-- 关键词模糊搜索（商品名称） -->
+            <if test="keyword != null and keyword != ''">
+                AND name LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <!-- 分类ID筛选 -->
+            <if test="categoryId != null and categoryId != 0">
+                AND category_id = #{categoryId}
+            </if>
+        </where>
+        <!-- 动态排序 -->
+        <if test="sortBy != null and sortBy != '' and order != null and order != ''">
+            ORDER BY ${sortBy} ${order}
+        </if>
+        <!-- 分页 -->
+        <if test="page != null and size != null">
+            LIMIT ${(page-1)*size}, #{size}
+        </if>
+    </select>
+
+</mapper>

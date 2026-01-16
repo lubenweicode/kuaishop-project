@@ -116,119 +116,119 @@ public class Product implements Serializable {
     /**
     * 商品ID
     */
-    private void setId(Long id){
+    public void setId(Long id){
     this.id = id;
     }
 
     /**
     * 商品名称
     */
-    private void setName(String name){
+    public void setName(String name){
     this.name = name;
     }
 
     /**
     * 商品描述
     */
-    private void setDescription(String description){
+    public void setDescription(String description){
     this.description = description;
     }
 
     /**
     * 现价
     */
-    private void setPrice(BigDecimal price){
+    public void setPrice(BigDecimal price){
     this.price = price;
     }
 
     /**
     * 原价（划线价）
     */
-    private void setOriginalPrice(BigDecimal originalPrice){
+    public void setOriginalPrice(BigDecimal originalPrice){
     this.originalPrice = originalPrice;
     }
 
     /**
     * 库存
     */
-    private void setStock(Integer stock){
+    public void setStock(Integer stock){
     this.stock = stock;
     }
 
     /**
     * 销量
     */
-    private void setSales(Integer sales){
+    public void setSales(Integer sales){
     this.sales = sales;
     }
 
     /**
     * 分类ID
     */
-    private void setCategoryId(Long categoryId){
+    public void setCategoryId(Long categoryId){
     this.categoryId = categoryId;
     }
 
     /**
     * 主图URL
     */
-    private void setMainImage(String mainImage){
+    public void setMainImage(String mainImage){
     this.mainImage = mainImage;
     }
 
     /**
     * 详情图数组
     */
-    private void setImages(Object images){
+    public void setImages(Object images){
     this.images = images;
     }
 
     /**
     * 规格参数
     */
-    private void setSpecifications(Object specifications){
+    public void setSpecifications(Object specifications){
     this.specifications = specifications;
     }
 
     /**
     * 状态：0-下架 1-上架
     */
-    private void setStatus(Integer status){
+    public void setStatus(Integer status){
     this.status = status;
     }
 
     /**
     * 是否热销
     */
-    private void setIsHot(Integer isHot){
+    public void setIsHot(Integer isHot){
     this.isHot = isHot;
     }
 
     /**
     * 是否新品
     */
-    private void setIsNew(Integer isNew){
+    public void setIsNew(Integer isNew){
     this.isNew = isNew;
     }
 
     /**
     * 浏览数
     */
-    private void setViewCount(Integer viewCount){
+    public void setViewCount(Integer viewCount){
     this.viewCount = viewCount;
     }
 
     /**
     * 创建时间
     */
-    private void setCreateTime(Date createTime){
+    public void setCreateTime(Date createTime){
     this.createTime = createTime;
     }
 
     /**
     * 更新时间
     */
-    private void setUpdateTime(Date updateTime){
+    public void setUpdateTime(Date updateTime){
     this.updateTime = updateTime;
     }
 
@@ -236,119 +236,119 @@ public class Product implements Serializable {
     /**
     * 商品ID
     */
-    private Long getId(){
+    public Long getId(){
     return this.id;
     }
 
     /**
     * 商品名称
     */
-    private String getName(){
+    public String getName(){
     return this.name;
     }
 
     /**
     * 商品描述
     */
-    private String getDescription(){
+    public String getDescription(){
     return this.description;
     }
 
     /**
     * 现价
     */
-    private BigDecimal getPrice(){
+    public BigDecimal getPrice(){
     return this.price;
     }
 
     /**
     * 原价（划线价）
     */
-    private BigDecimal getOriginalPrice(){
+    public BigDecimal getOriginalPrice(){
     return this.originalPrice;
     }
 
     /**
     * 库存
     */
-    private Integer getStock(){
+    public Integer getStock(){
     return this.stock;
     }
 
     /**
     * 销量
     */
-    private Integer getSales(){
+    public Integer getSales(){
     return this.sales;
     }
 
     /**
     * 分类ID
     */
-    private Long getCategoryId(){
+    public Long getCategoryId(){
     return this.categoryId;
     }
 
     /**
     * 主图URL
     */
-    private String getMainImage(){
+    public String getMainImage(){
     return this.mainImage;
     }
 
     /**
     * 详情图数组
     */
-    private Object getImages(){
+    public Object getImages(){
     return this.images;
     }
 
     /**
     * 规格参数
     */
-    private Object getSpecifications(){
+    public Object getSpecifications(){
     return this.specifications;
     }
 
     /**
     * 状态：0-下架 1-上架
     */
-    private Integer getStatus(){
+    public Integer getStatus(){
     return this.status;
     }
 
     /**
     * 是否热销
     */
-    private Integer getIsHot(){
+    public Integer getIsHot(){
     return this.isHot;
     }
 
     /**
     * 是否新品
     */
-    private Integer getIsNew(){
+    public Integer getIsNew(){
     return this.isNew;
     }
 
     /**
     * 浏览数
     */
-    private Integer getViewCount(){
+    public Integer getViewCount(){
     return this.viewCount;
     }
 
     /**
     * 创建时间
     */
-    private Date getCreateTime(){
+    public Date getCreateTime(){
     return this.createTime;
     }
 
     /**
     * 更新时间
     */
-    private Date getUpdateTime(){
+    public Date getUpdateTime(){
     return this.updateTime;
     }
 
