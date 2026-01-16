@@ -23,6 +23,11 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements Au
     @Autowired
     private JwtUtil jwtUtil;
 
+    /**
+     * 注册
+     * @param registerAuthDTO
+     * @return
+     */
     @Override
     public Result<Object> register(RegisterAuthDTO registerAuthDTO) {
 
@@ -54,6 +59,11 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements Au
         return Result.success(registerAuthVO);
     }
 
+    /**
+     * 登录
+     * @param loginAuthDTO
+     * @return
+     */
     @Override
     public Result<Map<String,Object>> login(LoginAuthDTO loginAuthDTO) {
 
@@ -79,6 +89,11 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements Au
         return Result.success(result);
     }
 
+    /**
+     * 获取当前用户信息
+     * @param authorization
+     * @return
+     */
     @Override
     public Result<UserInfoVO> getCurrentUser(String authorization) {
 

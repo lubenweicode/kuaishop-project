@@ -42,6 +42,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         this.objectMapper = objectMapper;
     }
 
+    /**
+     * 商品列表查询
+     * @param productDTO
+     * @return
+     */
     @Override
     public Result<ProductListVO> getProducts(ProductDTO productDTO) throws JsonProcessingException  {
         // 1.构建唯一缓存键(仅包含非默认/非空参数)
@@ -97,6 +102,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         return Result.success(productListVO);
     }
 
+    /**
+     * 商品详情查询
+     * @param id
+     * @return
+     */
     private String buildCacheKey(ProductDTO productDTO){
         StringBuilder conditionBuilder = new StringBuilder();
 
@@ -134,6 +144,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         return PRODUCT_CACHE_PREFIX + conditionStr;
     }
 
+    /**
+     * 商品详情查询
+     * @param id
+     * @return
+     */
     @Override
     public Result<Product> getProductById(Long id) throws JsonProcessingException {
         if(id == null){
@@ -164,6 +179,10 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         return Result.success(productVO);
     }
 
+    /**
+     * 商品分类列表查询
+     * @return
+     */
     @Override
     public Result<List<ProductCategory>> getProductCategories() throws JsonProcessingException {
         String cacheKey = PRODUCT_CACHE_VALUE_PREFIX;
