@@ -10,18 +10,28 @@ import generator.domain.demo.Result;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeansException;
+import org.springframework.data.redis.RedisConnectionFailureException;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
 public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements AuthService{
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
+    private final StringRedisTemplate redisTemplate;
+
+    private final String CACHE_JWT_TOKEN = "jwt:";
+
+    public AuthServiceImpl(JwtUtil jwtUtil, StringRedisTemplate redisTemplate) {
+        this.jwtUtil = jwtUtil;
+        this.redisTemplate = redisTemplate;
+    }
 
     /**
      * 注册
@@ -79,13 +89,28 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements Au
 
         User user = this.getOne(lambdaQueryWrapper);
 
-        String token = jwtUtil.generateToken(String.valueOf(user.getId()));
-        LoginAuthVO loginAuthVO = new LoginAuthVO();
-        BeanUtils.copyProperties(user,loginAuthVO);
+        Map<String,Object> result = null;
+        try {
+            String token = jwtUtil.generateToken(String.valueOf(user.getId()));
+            LoginAuthVO loginAuthVO = new LoginAuthVO();
+            BeanUtils.copyProperties(user,loginAuthVO);
 
-        Map<String,Object> result = new HashMap<>();
-        result.put("token",token);
-        result.put("userInfo",loginAuthVO);
+            result = new HashMap<>();
+            result.put("token",token);
+            result.put("userInfo",loginAuthVO);
+
+            // 将用户token写入Redis
+            String cacheAccessToken = CACHE_JWT_TOKEN + user.getId()+":"+"access";
+            redisTemplate.opsForValue().set(cacheAccessToken,token,10, TimeUnit.DAYS);
+            String cacheRefreshToken = CACHE_JWT_TOKEN + user.getId()+":"+"refresh";
+            redisTemplate.opsForValue().set(cacheRefreshToken,token,30, TimeUnit.DAYS);
+        } catch (RedisConnectionFailureException e) {
+            log.error("Redis连接失败：{}", e.getMessage());
+            return Result.error(500,"Redis连接失败，请稍后重试");
+        } catch (BeansException e){
+            log.error("Bean异常：{}", e.getMessage());
+            return Result.error(500,"Bean异常，请稍后重试");
+        }
         return Result.success(result);
     }
 

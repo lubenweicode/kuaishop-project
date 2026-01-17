@@ -35,4 +35,5 @@ public class Result<T>{
     public static <T> Result<T> success(){
         return new Result<>(200,"success",null);
     }
+
 }

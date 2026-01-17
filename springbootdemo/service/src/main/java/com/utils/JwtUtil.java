@@ -129,10 +129,11 @@ public class JwtUtil {
 
     /**
      * 获取Token剩余过期时间（毫秒）
+     *
      * @param token JWT token字符串
-     * @return      剩余时间（负数表示已过期）
+     * @return 剩余时间（负数表示已过期）
      */
-    public Long getRemainingTime(String token) {
+    public long getRemainingTime(String token) {
         Claims claims = parseToken(token);
         Date expireDate = claims.getExpiration();
         return expireDate.getTime() - System.currentTimeMillis();

@@ -1,7 +1,6 @@
 package com.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -16,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -35,6 +33,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     private final ProductMapper productMapper;
     private final StringRedisTemplate redisTemplate;
     private final ObjectMapper objectMapper;
+
 
     public ProductServiceImpl(ProductMapper productMapper, StringRedisTemplate redisTemplate, ObjectMapper objectMapper) {
         this.productMapper = productMapper;
@@ -103,9 +102,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     }
 
     /**
-     * 商品详情查询
-     * @param id
-     * @return
+     * 生成缓存键
      */
     private String buildCacheKey(ProductDTO productDTO){
         StringBuilder conditionBuilder = new StringBuilder();

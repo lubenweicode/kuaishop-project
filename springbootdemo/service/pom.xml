@@ -92,6 +92,13 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
         </dependency>
+
+        <!-- 引入Guava依赖 -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>32.1.3-jre</version>
+        </dependency>
     </dependencies>
 
     <!-- 如果是主应用模块，添加 Spring Boot 插件 -->

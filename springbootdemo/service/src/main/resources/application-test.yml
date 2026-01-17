@@ -1,0 +1,13 @@
+# 测试环境专属配置
+spring:
+  profiles: test
+
+# 测试环境关闭JWT拦截器
+jwt:
+  interceptor:
+    enable: false
+
+# 测试环境MyBatis-Plus打印SQL（可选）
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
