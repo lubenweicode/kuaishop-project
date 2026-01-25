@@ -1,9 +1,9 @@
 package com.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import generator.domain.Entity.User;
+import generator.domain.Entity.Orders;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface AuthMapper extends BaseMapper<User> {
+public interface OrderMapper extends BaseMapper<Orders> {
 }

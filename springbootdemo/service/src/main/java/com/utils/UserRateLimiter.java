@@ -108,7 +108,7 @@ public class UserRateLimiter {
     }
 
     /**
-     * 从Token解析用户ID（替换为你的实际JWT解析逻辑）
+     * 从Token解析用户ID
      */
     private String parseUserIdFromToken(String token) {
         try {

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mapper.AuthMapper;
 import com.utils.JwtUtil;
+import com.utils.Sha256Util;
 import generator.domain.Entity.User;
 import generator.domain.auth.*;
 import generator.domain.demo.Result;
@@ -25,12 +26,14 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements Au
 
     private final JwtUtil jwtUtil;
     private final StringRedisTemplate redisTemplate;
+    private final Sha256Util sha256Util;
 
     private final String CACHE_JWT_TOKEN = "jwt:";
 
-    public AuthServiceImpl(JwtUtil jwtUtil, StringRedisTemplate redisTemplate) {
+    public AuthServiceImpl(JwtUtil jwtUtil, StringRedisTemplate redisTemplate, Sha256Util sha256Util) {
         this.jwtUtil = jwtUtil;
         this.redisTemplate = redisTemplate;
+        this.sha256Util = sha256Util;
     }
 
     /**
@@ -50,9 +53,12 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements Au
             return Result.error(400,"用户名已存在");
         }
 
+        // 密码加密
+        String pwd = Sha256Util.encrypt(registerAuthDTO.getPassword());
+
         User user = new User();
         user.setUsername(registerAuthDTO.getUsername());
-        user.setPassword(registerAuthDTO.getPassword());
+        user.setPassword(pwd);
         user.setEmail(registerAuthDTO.getEmail());
         user.setPhone(registerAuthDTO.getPhone());
 
@@ -77,9 +83,11 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements Au
     @Override
     public Result<Map<String,Object>> login(LoginAuthDTO loginAuthDTO) {
 
+        String pwd = Sha256Util.encrypt(loginAuthDTO.getPassword());
+
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(User::getUsername,loginAuthDTO.getUsername());
-        lambdaQueryWrapper.eq(User::getPassword,loginAuthDTO.getPassword());
+        lambdaQueryWrapper.eq(User::getPassword,pwd);
 
         boolean validUser = this.exists(lambdaQueryWrapper);
 

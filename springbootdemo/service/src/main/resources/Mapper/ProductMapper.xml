@@ -14,6 +14,7 @@
         <!-- 其他字段根据你的 Product 实体类补充 -->
     </resultMap>
 
+
     <!-- 动态条件查询商品列表 -->
     <select id="selectByCondition" parameterType="generator.domain.product.ProductDTO" resultMap="ProductResultMap">
         SELECT
@@ -39,5 +40,12 @@
             LIMIT ${(page-1)*size}, #{size}
         </if>
     </select>
+
+    <!-- 减库存 -->
+    <update id="updateStock">
+        UPDATE product
+        SET stock = stock - #{quantity}
+        WHERE id = #{productId} AND stock >= #{quantity}
+    </update>
 
 </mapper>

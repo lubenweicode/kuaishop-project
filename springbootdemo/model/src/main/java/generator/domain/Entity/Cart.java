@@ -1,7 +1,11 @@
 package generator.domain.Entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -10,6 +14,7 @@ import java.util.Date;
 * 购物车表
 * @TableName cart
 */
+@Data
 public class Cart implements Serializable {
 
     /**
@@ -17,6 +22,7 @@ public class Cart implements Serializable {
     */
     @NotNull(message="[购物车项ID]不能为空")
     @ApiModelProperty("购物车项ID")
+    @TableId(type = IdType.AUTO)
     private Long id;
     /**
     * 用户ID
@@ -50,104 +56,5 @@ public class Cart implements Serializable {
     */
     @ApiModelProperty("更新时间")
     private Date updateTime;
-
-    /**
-    * 购物车项ID
-    */
-    private void setId(Long id){
-    this.id = id;
-    }
-
-    /**
-    * 用户ID
-    */
-    private void setUserId(Long userId){
-    this.userId = userId;
-    }
-
-    /**
-    * 商品ID
-    */
-    private void setProductId(Long productId){
-    this.productId = productId;
-    }
-
-    /**
-    * 数量
-    */
-    private void setQuantity(Integer quantity){
-    this.quantity = quantity;
-    }
-
-    /**
-    * 是否选中
-    */
-    private void setSelected(Integer selected){
-    this.selected = selected;
-    }
-
-    /**
-    * 加入时间
-    */
-    private void setCreateTime(Date createTime){
-    this.createTime = createTime;
-    }
-
-    /**
-    * 更新时间
-    */
-    private void setUpdateTime(Date updateTime){
-    this.updateTime = updateTime;
-    }
-
-
-    /**
-    * 购物车项ID
-    */
-    private Long getId(){
-    return this.id;
-    }
-
-    /**
-    * 用户ID
-    */
-    private Long getUserId(){
-    return this.userId;
-    }
-
-    /**
-    * 商品ID
-    */
-    private Long getProductId(){
-    return this.productId;
-    }
-
-    /**
-    * 数量
-    */
-    private Integer getQuantity(){
-    return this.quantity;
-    }
-
-    /**
-    * 是否选中
-    */
-    private Integer getSelected(){
-    return this.selected;
-    }
-
-    /**
-    * 加入时间
-    */
-    private Date getCreateTime(){
-    return this.createTime;
-    }
-
-    /**
-    * 更新时间
-    */
-    private Date getUpdateTime(){
-    return this.updateTime;
-    }
 
 }

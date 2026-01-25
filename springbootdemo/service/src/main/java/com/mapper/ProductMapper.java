@@ -4,10 +4,13 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import generator.domain.Entity.Product;
 import generator.domain.Entity.ProductCategory;
 import generator.domain.product.ProductDTO;
+import jakarta.validation.constraints.NotNull;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
+@Mapper
 public interface ProductMapper extends BaseMapper<Product> {
 
 
@@ -18,4 +21,10 @@ public interface ProductMapper extends BaseMapper<Product> {
 
     @Select("select * from product_category where id = #{categoryId}")
     ProductCategory selectCategoryById(String categoryId);
+
+    @Select("select * from product where id = #{productId}")
+    Product getProductById(@NotNull(message="[商品ID]不能为空") Long productId);
+
+
+    Integer updateStock(Long productId, Integer quantity);
 }

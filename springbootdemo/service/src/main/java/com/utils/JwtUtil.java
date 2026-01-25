@@ -2,6 +2,8 @@ package com.utils;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +17,7 @@ import java.util.Map;
  * 支持生成token、解析token、验证token、获取token中的信息等
  */
 @Component
+@Slf4j
 public class JwtUtil {
 
     // 从配置文件注入JWT过期时间（毫秒）
@@ -89,18 +92,19 @@ public class JwtUtil {
      */
     public boolean validateToken(String token) {
         try {
+            log.info("正在验证Token：{}", token);
             parseToken(token);
             return true;
         } catch (ExpiredJwtException e) {
-            System.err.println("Token已过期：" + e.getMessage());
+            log.error("Token已过期：{}", e.getMessage());
         } catch (MalformedJwtException e) {
-            System.err.println("Token格式错误：" + e.getMessage());
+            log.error("Token格式错误：{}", e.getMessage());
         } catch (SignatureException e) {
-            System.err.println("Token签名验证失败：" + e.getMessage());
+            log.error("Token签名验证失败：{}", e.getMessage());
         } catch (IllegalArgumentException e) {
-            System.err.println("Token为空或无效：" + e.getMessage());
+            log.error("Token为空或无效：{}", e.getMessage());
         } catch (Exception e) {
-            System.err.println("Token验证失败：" + e.getMessage());
+            log.error("Token验证异常：{}", e.getMessage(), e);
         }
         return false;
     }
@@ -113,6 +117,24 @@ public class JwtUtil {
     public String getUserIdFromToken(String token) {
         Claims claims = parseToken(token);
         return claims.getSubject();
+    }
+
+    /**
+     * 从请求头中获取Token中的用户ID
+     * @param request 请求对象
+     * @return        用户ID
+     */
+    public Long getUserIdFromToken(HttpServletRequest  request){
+        String token = request.getHeader("Authorization");
+        if (token == null || !token.startsWith("Bearer ")){
+            return null;
+        }
+        token = token.substring(7);
+        // 验证Token
+        if(!validateToken( token)){
+            return null;
+        }
+        return Long.valueOf(getUserIdFromToken(token));
     }
 
     /**
@@ -138,4 +160,5 @@ public class JwtUtil {
         Date expireDate = claims.getExpiration();
         return expireDate.getTime() - System.currentTimeMillis();
     }
+
 }
