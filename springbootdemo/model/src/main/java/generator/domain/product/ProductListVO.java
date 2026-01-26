@@ -1,6 +1,6 @@
 package generator.domain.product;
 
-import generator.domain.Entity.Product;
+import generator.domain.entity.Product;
 import lombok.Data;
 
 import java.util.List;

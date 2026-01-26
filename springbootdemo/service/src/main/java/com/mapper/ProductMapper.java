@@ -1,8 +1,8 @@
 package com.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import generator.domain.Entity.Product;
-import generator.domain.Entity.ProductCategory;
+import generator.domain.entity.Product;
+import generator.domain.entity.ProductCategory;
 import generator.domain.product.ProductDTO;
 import jakarta.validation.constraints.NotNull;
 import org.apache.ibatis.annotations.Mapper;

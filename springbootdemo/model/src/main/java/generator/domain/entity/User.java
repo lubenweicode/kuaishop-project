@@ -1,4 +1,4 @@
-package generator.domain.Entity;
+package generator.domain.entity;
 
 
 import com.baomidou.mybatisplus.annotation.IdType;

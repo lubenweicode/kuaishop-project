@@ -1,7 +1,7 @@
 package com.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import generator.domain.Entity.Orders;
+import generator.domain.entity.Orders;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

@@ -1,7 +1,6 @@
-package generator.domain.Entity;
+package generator.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotNull;

@@ -1,4 +1,4 @@
-package generator.domain.Entity;
+package generator.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -51,7 +51,7 @@ public class Orders {
     /**
      * 总金额
      */
-    @TableField(value = "total_amount")
+    @TableField(value = "total_amount",exist = false)
     @ApiModelProperty("总金额")
     @Size(max= 10,message="编码长度不能超过10")
     private BigDecimal totalAmount;
@@ -63,6 +63,14 @@ public class Orders {
     @ApiModelProperty("状态：0-待支付 1-已支付 2-已发货 3-已完成 4-已取消")
     @Size(max= 1,message="编码长度不能超过1")
     private Integer orderStatus;
+
+    /**
+     * 原因
+     */
+    @TableField(value = "reason")
+    @ApiModelProperty("原因")
+    @Size(max= 200,message="编码长度不能超过200")
+    private String reason;
 
     /**
      * 订单详情：数量、类型等
@@ -134,4 +142,6 @@ public class Orders {
 
     public void setTotalAmount(BigDecimal totalAmount) {
     }
+
+
 }

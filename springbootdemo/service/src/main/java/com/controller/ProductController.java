@@ -2,8 +2,8 @@ package com.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.service.ProductService;
-import generator.domain.Entity.Product;
-import generator.domain.Entity.ProductCategory;
+import generator.domain.entity.Product;
+import generator.domain.entity.ProductCategory;
 import generator.domain.demo.Result;
 import generator.domain.product.ProductDTO;
 import generator.domain.product.ProductListVO;

@@ -1,24 +1,25 @@
 package com.service;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mapper.OrderMapper;
 import com.mapper.ProductMapper;
 import com.utils.OrderDistributedLock;
-import generator.domain.Entity.Orders;
-import generator.domain.Entity.Product;
+import generator.domain.entity.Orders;
+import generator.domain.entity.Product;
 import generator.domain.demo.Result;
-import generator.domain.order.OrderCreateDTO;
-import generator.domain.order.OrderItem;
-import generator.domain.order.OrderVO;
+import generator.domain.order.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,6 +44,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
     @Override
     @Transactional(rollbackFor = Exception.class)// 事务控制, 出现异常回滚
     public Result<OrderVO> createOrder(Long userId,OrderCreateDTO orderCreateDTO) {
+
+        if (userId == null) {
+            return Result.error(500, "请先登录");
+        }
+
         // 1. 参数基础校验
         List< Long> productIds = orderCreateDTO.getCartItemIds();
         if (productIds == null || productIds.isEmpty()) {
@@ -125,15 +131,21 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
             order.setUserId(userId);
 
             // 7. 拼接订单商品信息
-            StringBuilder orderProductInfo = new StringBuilder();
+            List<OrderItemVO> productInfoList = new ArrayList<>();
             for (OrderItem item : items) {
                 Product product = productMap.get(item.getProductId());
-                orderProductInfo.append("商品名称:").append(product.getName())
-                        .append(";商品价格:").append(product.getPrice())
-                        .append(";商品数量:").append(item.getQuantity())
-                        .append(";");
+                OrderItemVO itemVO = new OrderItemVO();
+                itemVO.setProductId(product.getId());
+                itemVO.setProductName(product.getName());
+                itemVO.setProductImage(product.getMainImage());
+                itemVO.setPrice(product.getPrice());
+                itemVO.setQuantity(item.getQuantity());
+                itemVO.setTotalPrice(product.getPrice().multiply(new BigDecimal(item.getQuantity())));
+                productInfoList.add(itemVO);
             }
-            order.setInfo(orderProductInfo.toString());
+            // 转为JSON字符串
+            String orderProductInfo = JSON.toJSONString(productInfoList);
+            order.setInfo(orderProductInfo);
 
             // 8. 插入订单数据
             int insertCount = orderMapper.insert(order);
@@ -156,5 +168,210 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
                 orderDistributedLock.releaseLock(lockKey, lockValue);
             }
         }
+    }
+
+    /**
+     * 获取订单列表
+     *
+     * @param userId   用户ID
+     * @param pageNum  页码
+     * @param pageSize 页大小
+     * @param status   订单状态 0:待付款 1:待发货 2:待收货 3:已完成 4:已取消
+     */
+    @Override
+    public Result<OrderPageVO> getOrderList(Long userId, Integer pageNum, Integer pageSize, Integer status) {
+        // 1. 校验入参
+        if (userId == null) {
+            return Result.error(400, "用户ID不能为空");
+        }
+
+        if(pageNum == null || pageNum <= 0){
+            return Result.error(400, "页码不能小于1");
+        }
+
+        if(pageSize == null || pageSize <= 0){
+            return Result.error(400, "页大小不能小于1");
+        }
+
+        IPage<Orders> page = new Page<>(pageNum, pageSize);
+        LambdaQueryWrapper<Orders> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Orders::getUserId, userId);
+
+        if(status != null){
+            queryWrapper.eq(Orders::getOrderStatus, status);
+        }
+
+        // 3. 执行分页查询
+        IPage<Orders> ordersPage = orderMapper.selectPage(page, queryWrapper);
+        List<Orders> orders = Optional.ofNullable(ordersPage.getRecords()).orElse(Collections.emptyList());
+
+        // 4. 转为VO
+        List<OrderVO> orderVOList = orders.stream()
+                .map(order -> {
+                    OrderVO orderVO = new OrderVO();
+                    BeanUtils.copyProperties(order, orderVO);
+
+                    orderVO.setUserId(order.getUserId());
+                    orderVO.setStatus(order.getOrderStatus());
+                    orderVO.setTotalAmount(order.getTotalAmount());
+                    orderVO.setStatus(order.getOrderStatus());
+                    // 安全解析JSON，指定泛型
+                    if (order.getInfo() != null && !order.getInfo().isEmpty()) {
+                        try {
+                            com.alibaba.fastjson.parser.ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
+                            List<OrderItemVO> orderItemVOList = JSON.parseArray(
+                                    order.getInfo(),
+                                    OrderItemVO.class
+                            );
+                            orderVO.setItems(orderItemVOList);
+                        } catch (Exception e) {
+                            log.warn("解析订单{}商品信息失败", order.getOrderNo(), e);
+                            orderVO.setItems(new ArrayList<>());
+                        }
+                    } else {
+                        orderVO.setItems(new ArrayList<>());
+                    }
+                    return orderVO;
+                })
+                .collect(Collectors.toList());
+
+        // 5. 构建VO的分页对象
+        OrderPageVO orderList = new OrderPageVO();
+        orderList.setTotal(ordersPage.getTotal());
+        orderList.setPages(ordersPage.getPages());
+        orderList.setCurrent((int) ordersPage.getCurrent());
+        orderList.setSize((int) ordersPage.getSize());
+        orderList.setRecords(orderVOList);
+
+        // 6. 返回结果
+        return Result.success(orderList);
+    }
+
+    @Override
+    public Result<OrderVO> getOrder(Long userId,String orderNo) {
+
+        if(userId == null){
+            log.warn("用户ID不能为空");
+            return Result.error(400, "用户ID不能为空");
+        }
+
+        if(orderNo == null){
+            log.warn("订单号不能为空");
+            return Result.error(400, "订单号不能为空");
+        }
+
+        LambdaQueryWrapper<Orders> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Orders::getUserId, userId);
+        queryWrapper.eq(Orders::getOrderNo, orderNo);
+        Orders order = orderMapper.selectOne(queryWrapper);
+        if(order == null){
+            log.warn("订单不存在");
+            return Result.error(404, "订单不存在");
+        }
+
+        OrderVO orderVO = new OrderVO();
+        BeanUtils.copyProperties(order, orderVO);
+
+        orderVO.setUserId(order.getUserId());
+        orderVO.setStatus(order.getOrderStatus());
+        orderVO.setTotalAmount(order.getTotalAmount());
+
+        if(order.getInfo() != null && !order.getInfo().isEmpty()){
+            try{
+                List<OrderItemVO> orderItemVOList = JSON.parseArray(order.getInfo(), OrderItemVO.class);
+                orderVO.setItems(orderItemVOList);
+            }catch (Exception e){
+                log.warn("解析订单{}商品信息失败", order.getOrderNo(), e);
+                orderVO.setItems(new ArrayList<>());
+            }
+        }else{
+            orderVO.setItems(new ArrayList<>());
+        }
+
+        return Result.success(orderVO);
+    }
+
+    /**
+     * 取消订单
+     *
+     * @param userId  用户ID
+     * @param orderNo 订单号
+     * @param reason  取消原因
+     */
+    @Override
+    public Result<String> cancelOrder(Long userId, String orderNo, String reason) {
+
+        if(userId == null){
+            log.warn("用户ID不能为空");
+            return Result.error(400, "用户ID不能为空");
+        }
+
+        if(orderNo == null){
+            log.warn("订单号不能为空");
+            return Result.error(400, "订单号不能为空");
+        }
+
+        LambdaQueryWrapper<Orders> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Orders::getUserId, userId);
+        queryWrapper.eq(Orders::getOrderNo, orderNo);
+        Orders order = orderMapper.selectOne(queryWrapper);
+        if(order == null){
+            log.warn("订单不存在");
+            return Result.error(404, "订单不存在");
+        }
+
+        if(order.getOrderStatus() != 0){
+            log.warn("订单{}状态错误", order.getOrderNo());
+            return Result.error(400, "订单状态错误");
+        }
+
+        order.setOrderStatus(4);
+        order.setReason(reason);
+
+        int update = orderMapper.update(order, queryWrapper);
+        if(update == 0){
+            log.warn("订单{}取消失败", order.getOrderNo());
+            return Result.error(500, "订单取消失败");
+        }
+
+        return Result.success("订单取消成功");
+    }
+
+    /**
+     * 删除订单
+     *
+     * @param userId  用户ID
+     * @param orderNo 订单号
+     */
+    @Override
+    public Result<String> deleteOrder(Long userId, String orderNo) {
+
+        if(userId == null){
+            log.warn("用户ID不能为空");
+            return Result.error(400, "用户ID不能为空");
+        }
+
+        if(orderNo == null){
+            log.warn("订单号不能为空");
+            return Result.error(400, "订单号不能为空");
+        }
+
+        // 仅允许删除已完成或已取消的订单
+        LambdaQueryWrapper<Orders> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Orders::getUserId, userId);
+        queryWrapper.eq(Orders::getOrderNo, orderNo);
+        Orders order = orderMapper.selectOne(queryWrapper);
+
+        if(order.getOrderStatus() != 3 && order.getOrderStatus() != 4){
+            log.warn("订单{}状态错误", order.getOrderNo());
+            return Result.error(400, "订单状态错误");
+        }
+
+        int delete = orderMapper.delete(queryWrapper);
+        if(delete == 0){
+            log.warn("订单{}删除失败", order.getOrderNo());
+            return Result.error(500, "订单删除失败");
+        }
+        return Result.success("订单删除成功");
     }
 }

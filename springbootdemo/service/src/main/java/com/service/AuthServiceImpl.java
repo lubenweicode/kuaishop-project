@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mapper.AuthMapper;
 import com.utils.JwtUtil;
 import com.utils.Sha256Util;
-import generator.domain.Entity.User;
+import generator.domain.entity.User;
 import generator.domain.auth.*;
 import generator.domain.demo.Result;
 import io.jsonwebtoken.Claims;

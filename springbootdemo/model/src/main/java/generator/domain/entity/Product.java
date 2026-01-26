@@ -1,4 +1,4 @@
-package generator.domain.Entity;
+package generator.domain.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotBlank;

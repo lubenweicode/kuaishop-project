@@ -1,7 +1,7 @@
 package com.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import generator.domain.Entity.User;
+import generator.domain.entity.User;
 import generator.domain.auth.LoginAuthDTO;
 import generator.domain.auth.RegisterAuthDTO;
 import generator.domain.auth.UserInfoVO;

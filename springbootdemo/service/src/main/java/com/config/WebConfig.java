@@ -1,5 +1,6 @@
 package com.config;
 
+import com.interceptor.JwtInterceptor;
 import com.interceptor.UserRateLimitInterceptor;
 import com.properties.RateLimitProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,17 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private RateLimitProperties rateLimitProperties;
 
+    @Autowired
+    private JwtInterceptor jwtInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(userRateLimitInterceptor)
                 .addPathPatterns(rateLimitProperties.getInterceptor().getIncludePaths())
                 .excludePathPatterns(rateLimitProperties.getInterceptor().getExcludePaths());
+        registry.addInterceptor(jwtInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns("/login", "/register", "/public/**");
+                // 添加其他拦截器
     }
 }

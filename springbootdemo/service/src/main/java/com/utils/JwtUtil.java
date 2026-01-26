@@ -115,8 +115,15 @@ public class JwtUtil {
      * @return      用户ID
      */
     public String getUserIdFromToken(String token) {
-        Claims claims = parseToken(token);
-        return claims.getSubject();
+        try {
+            Claims claims = parseToken(token);
+            String userId = claims.getSubject();
+            // 校验userId是否为空
+            return userId == null || userId.isEmpty() ? null : userId;
+        }catch (Exception e){
+            log.error("从Token中获取用户ID异常：{}", e.getMessage(), e);
+            return null;
+        }
     }
 
     /**

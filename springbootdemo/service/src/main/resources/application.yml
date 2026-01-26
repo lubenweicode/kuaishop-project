@@ -66,16 +66,17 @@ jwt:
   expire: 3600000  # 1小时（毫秒）
   sign-key: uNivjsEvr9aUNhpKahuChoGmsjaOdYSB   # 密钥（≥32字符）
   interceptor:
-    enable: false # 生产环境开启
+    enable: true # 生产环境开启
 
 rate-limit:
   interceptor:
+    # 注意：这里是上下文内的路径（/api/v1 之后的部分），无需加 /api/v1 前缀
     include-paths:
-      - /api/v1/cart
-      - /api/v1/order
+      - /cart    # 对应实际路径：/api/v1/cart
+      - /order   # 对应实际路径：/api/v1/order
     exclude-paths:
-      - /api/v1/auth/login
-      - /api/v1/auth/register
-      - /api/v1/auth/logout
-      - /api/v1/products
-      - /api/v1/products/*
+      - /auth/login    # 对应实际路径：/api/v1/auth/login
+      - /auth/register # 对应实际路径：/api/v1/auth/register
+      - /auth/logout   # 对应实际路径：/api/v1/auth/logout
+      - /products      # 对应实际路径：/api/v1/products
+      - /products/*    # 对应实际路径：/api/v1/products/*

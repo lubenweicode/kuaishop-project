@@ -7,10 +7,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.mapper.CartMapper;
 import com.mapper.ProductMapper;
 import com.utils.RedisJsonUtil;
-import generator.domain.Entity.Cart;
-import generator.domain.Entity.Product;
+import generator.domain.entity.Cart;
+import generator.domain.entity.Product;
 import generator.domain.cart.CartAddItem;
-import generator.domain.cart.CartItem;
 import generator.domain.cart.CartItemVO;
 import generator.domain.demo.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -42,8 +41,8 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
     private static final long CART_CACHE_EXPIRE_TIME = 30; // 购物车缓存过期时间（分钟）
 
     @Override
-    public Result<Void> addCartItem(String userId, Integer productId, Integer quantity) {
-        if (userId == null || userId.isEmpty()) {
+    public Result<Void> addCartItem(Long userId, Integer productId, Integer quantity) {
+        if (userId == null) {
             return Result.error(401,"请先登录");
         }
 
@@ -87,8 +86,8 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
     }
 
     @Override
-    public Result<List<CartItemVO>> getCartItems(String userId) {
-        if (userId == null || userId.isEmpty()){
+    public Result<List<CartItemVO>> getCartItems(Long userId) {
+        if (userId == null){
             return Result.error(401,"请先登录");
         }
 
