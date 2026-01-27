@@ -6,10 +6,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mapper.ProductMapper;
+import com.service.service.ProductService;
 import generator.domain.entity.Product;
 import generator.domain.entity.ProductCategory;
 import generator.domain.demo.Result;
-import generator.domain.product.ProductDTO;
+import generator.domain.product.ProductPageDTO;
 import generator.domain.product.ProductListVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements ProductService{
+public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements ProductService {
 
     private static final String PRODUCT_CACHE_PREFIX = "product:list:";
     private static final String PRODUCT_CACHE_KEY_PREFIX = "product:info:";
@@ -47,7 +48,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
      * @return
      */
     @Override
-    public Result<ProductListVO> getProducts(ProductDTO productDTO) throws JsonProcessingException  {
+    public Result<ProductListVO> getProducts(ProductPageDTO productDTO) throws JsonProcessingException  {
         // 1.构建唯一缓存键(仅包含非默认/非空参数)
         String cacheKey = buildCacheKey(productDTO);
 
@@ -104,7 +105,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     /**
      * 生成缓存键
      */
-    private String buildCacheKey(ProductDTO productDTO){
+    private String buildCacheKey(ProductPageDTO productDTO){
         StringBuilder conditionBuilder = new StringBuilder();
 
         // 分页参数

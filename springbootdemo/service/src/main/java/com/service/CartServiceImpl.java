@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.mapper.CartMapper;
 import com.mapper.ProductMapper;
+import com.service.service.CartService;
 import com.utils.RedisJsonUtil;
 import generator.domain.entity.Cart;
 import generator.domain.entity.Product;

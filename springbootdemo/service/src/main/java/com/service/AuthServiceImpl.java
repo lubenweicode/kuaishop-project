@@ -3,6 +3,7 @@ package com.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mapper.AuthMapper;
+import com.service.service.AuthService;
 import com.utils.JwtUtil;
 import com.utils.Sha256Util;
 import generator.domain.entity.User;
@@ -22,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
-public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements AuthService{
+public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements AuthService {
 
     private final JwtUtil jwtUtil;
     private final StringRedisTemplate redisTemplate;

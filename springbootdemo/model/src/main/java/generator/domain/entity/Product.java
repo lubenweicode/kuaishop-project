@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
@@ -14,6 +15,7 @@ import java.util.Date;
 * 商品表
 * @TableName product
 */
+@Data
 public class Product implements Serializable {
 
     /**
@@ -37,6 +39,15 @@ public class Product implements Serializable {
     @ApiModelProperty("商品描述")
     @Length(max= 2000,message="编码长度不能超过2000")
     private String description;
+
+    /**
+    * 商品详情
+    */
+    @Size(max= 2000,message="编码长度不能超过2000")
+    @ApiModelProperty("商品详情")
+    @Length(max= 2000,message="编码长度不能超过2000")
+    private String detail;
+
     /**
     * 现价
     */
@@ -112,244 +123,5 @@ public class Product implements Serializable {
     */
     @ApiModelProperty("更新时间")
     private Date updateTime;
-
-    /**
-    * 商品ID
-    */
-    public void setId(Long id){
-    this.id = id;
-    }
-
-    /**
-    * 商品名称
-    */
-    public void setName(String name){
-    this.name = name;
-    }
-
-    /**
-    * 商品描述
-    */
-    public void setDescription(String description){
-    this.description = description;
-    }
-
-    /**
-    * 现价
-    */
-    public void setPrice(BigDecimal price){
-    this.price = price;
-    }
-
-    /**
-    * 原价（划线价）
-    */
-    public void setOriginalPrice(BigDecimal originalPrice){
-    this.originalPrice = originalPrice;
-    }
-
-    /**
-    * 库存
-    */
-    public void setStock(Integer stock){
-    this.stock = stock;
-    }
-
-    /**
-    * 销量
-    */
-    public void setSales(Integer sales){
-    this.sales = sales;
-    }
-
-    /**
-    * 分类ID
-    */
-    public void setCategoryId(Long categoryId){
-    this.categoryId = categoryId;
-    }
-
-    /**
-    * 主图URL
-    */
-    public void setMainImage(String mainImage){
-    this.mainImage = mainImage;
-    }
-
-    /**
-    * 详情图数组
-    */
-    public void setImages(Object images){
-    this.images = images;
-    }
-
-    /**
-    * 规格参数
-    */
-    public void setSpecifications(Object specifications){
-    this.specifications = specifications;
-    }
-
-    /**
-    * 状态：0-下架 1-上架
-    */
-    public void setStatus(Integer status){
-    this.status = status;
-    }
-
-    /**
-    * 是否热销
-    */
-    public void setIsHot(Integer isHot){
-    this.isHot = isHot;
-    }
-
-    /**
-    * 是否新品
-    */
-    public void setIsNew(Integer isNew){
-    this.isNew = isNew;
-    }
-
-    /**
-    * 浏览数
-    */
-    public void setViewCount(Integer viewCount){
-    this.viewCount = viewCount;
-    }
-
-    /**
-    * 创建时间
-    */
-    public void setCreateTime(Date createTime){
-    this.createTime = createTime;
-    }
-
-    /**
-    * 更新时间
-    */
-    public void setUpdateTime(Date updateTime){
-    this.updateTime = updateTime;
-    }
-
-
-    /**
-    * 商品ID
-    */
-    public Long getId(){
-    return this.id;
-    }
-
-    /**
-    * 商品名称
-    */
-    public String getName(){
-    return this.name;
-    }
-
-    /**
-    * 商品描述
-    */
-    public String getDescription(){
-    return this.description;
-    }
-
-    /**
-    * 现价
-    */
-    public BigDecimal getPrice(){
-    return this.price;
-    }
-
-    /**
-    * 原价（划线价）
-    */
-    public BigDecimal getOriginalPrice(){
-    return this.originalPrice;
-    }
-
-    /**
-    * 库存
-    */
-    public Integer getStock(){
-    return this.stock;
-    }
-
-    /**
-    * 销量
-    */
-    public Integer getSales(){
-    return this.sales;
-    }
-
-    /**
-    * 分类ID
-    */
-    public Long getCategoryId(){
-    return this.categoryId;
-    }
-
-    /**
-    * 主图URL
-    */
-    public String getMainImage(){
-    return this.mainImage;
-    }
-
-    /**
-    * 详情图数组
-    */
-    public Object getImages(){
-    return this.images;
-    }
-
-    /**
-    * 规格参数
-    */
-    public Object getSpecifications(){
-    return this.specifications;
-    }
-
-    /**
-    * 状态：0-下架 1-上架
-    */
-    public Integer getStatus(){
-    return this.status;
-    }
-
-    /**
-    * 是否热销
-    */
-    public Integer getIsHot(){
-    return this.isHot;
-    }
-
-    /**
-    * 是否新品
-    */
-    public Integer getIsNew(){
-    return this.isNew;
-    }
-
-    /**
-    * 浏览数
-    */
-    public Integer getViewCount(){
-    return this.viewCount;
-    }
-
-    /**
-    * 创建时间
-    */
-    public Date getCreateTime(){
-    return this.createTime;
-    }
-
-    /**
-    * 更新时间
-    */
-    public Date getUpdateTime(){
-    return this.updateTime;
-    }
 
 }

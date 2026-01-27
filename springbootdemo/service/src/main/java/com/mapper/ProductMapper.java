@@ -3,7 +3,7 @@ package com.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import generator.domain.entity.Product;
 import generator.domain.entity.ProductCategory;
-import generator.domain.product.ProductDTO;
+import generator.domain.product.ProductPageDTO;
 import jakarta.validation.constraints.NotNull;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -14,7 +14,7 @@ import java.util.List;
 public interface ProductMapper extends BaseMapper<Product> {
 
 
-    List<Product> selectByCondition(ProductDTO productDTO);
+    List<Product> selectByCondition(ProductPageDTO productDTO);
 
     @Select("select id from product_category")
     List<String> selectCategoryIds();

@@ -1,4 +1,4 @@
-package com.service;
+package com.service.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import generator.domain.entity.Orders;
@@ -6,8 +6,6 @@ import generator.domain.demo.Result;
 import generator.domain.order.OrderCreateDTO;
 import generator.domain.order.OrderPageVO;
 import generator.domain.order.OrderVO;
-
-import java.util.List;
 
 public interface OrderService extends IService<Orders> {
 

@@ -102,5 +102,9 @@ public class User implements Serializable {
     @ApiModelProperty("更新时间")
     private Date updateTime;
 
-
+    @ApiModelProperty("身份")
+    @Size(max= 1,message="编码长度不能超过1")
+    @Length(max= 1,message="编码长度不能超过1")
+    @NotBlank(message="[身份]不能为空")
+    private Integer identity;
 }

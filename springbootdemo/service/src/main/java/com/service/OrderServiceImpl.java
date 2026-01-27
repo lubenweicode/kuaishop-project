@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mapper.OrderMapper;
 import com.mapper.ProductMapper;
+import com.service.service.OrderService;
 import com.utils.OrderDistributedLock;
 import generator.domain.entity.Orders;
 import generator.domain.entity.Product;
@@ -17,14 +18,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implements OrderService{
+public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implements OrderService {
 
     private final OrderMapper orderMapper;
     private final ProductMapper productMapper;

@@ -1,6 +1,6 @@
 package com.controller;
 
-import com.service.OrderService;
+import com.service.service.OrderService;
 import generator.domain.context.UserContext;
 import generator.domain.demo.Result;
 import generator.domain.order.OrderCreateDTO;
@@ -8,8 +8,6 @@ import generator.domain.order.OrderPageVO;
 import generator.domain.order.OrderVO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/orders")

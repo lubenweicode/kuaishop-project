@@ -1,4 +1,4 @@
-package com.service;
+package com.service.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import generator.domain.entity.Cart;
