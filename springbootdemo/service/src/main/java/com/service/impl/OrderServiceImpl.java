@@ -1,4 +1,4 @@
-package com.service;
+package com.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mapper.OrderMapper;
 import com.mapper.ProductMapper;
-import com.service.service.OrderService;
+import com.service.OrderService;
 import com.utils.OrderDistributedLock;
 import generator.domain.entity.Orders;
 import generator.domain.entity.Product;
@@ -160,7 +160,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
 
         }catch (Exception e){
             // 捕获所有异常,保证事务回滚
-            log.error("创建订单异常,用户ID: {},异常信息: {}", userId, e.getMessage()); // 错误日志
+            log.error("创建订单异常,用户ID: {},异常信息: {}", userId, e); // 错误日志
             return Result.error(500, "创建订单异常,请稍后重试");
         }finally {
             // 10. 释放分布式锁

@@ -1,4 +1,4 @@
-package com.service.service;
+package com.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import generator.domain.address.AddressDTO;

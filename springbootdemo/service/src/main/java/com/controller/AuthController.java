@@ -1,6 +1,6 @@
 package com.controller;
 
-import com.service.service.AuthService;
+import com.service.AuthService;
 import generator.domain.auth.LoginAuthDTO;
 import generator.domain.auth.RegisterAuthDTO;
 import generator.domain.auth.UserInfoVO;

@@ -1,10 +1,10 @@
-package com.service;
+package com.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mapper.AddressMapper;
-import com.service.service.AddressService;
+import com.service.AddressService;
 import generator.domain.address.AddressDTO;
 import generator.domain.demo.Result;
 import generator.domain.entity.Address;

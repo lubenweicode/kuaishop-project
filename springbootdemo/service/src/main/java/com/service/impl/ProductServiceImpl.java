@@ -1,4 +1,4 @@
-package com.service;
+package com.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mapper.ProductMapper;
-import com.service.service.ProductService;
+import com.service.ProductService;
 import generator.domain.entity.Product;
 import generator.domain.entity.ProductCategory;
 import generator.domain.demo.Result;

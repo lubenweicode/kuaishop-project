@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @Data
 public class ProductVO {
@@ -14,8 +15,8 @@ public class ProductVO {
     private BigDecimal price; // 商品价格
     private BigDecimal originalPrice; // 商品原价
     private Integer stock; // 商品库存
-    private Integer categoryId; // 商品分类ID
+    private Long categoryId; // 商品分类ID
     private List<String> images; // 商品图片
-    private List<Specification> specifications; // 商品规格
+    private List<Map<String,String>> specifications; // 商品规格
     private Integer status; // 商品状态
 }

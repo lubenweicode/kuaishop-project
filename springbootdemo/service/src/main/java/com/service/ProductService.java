@@ -1,14 +1,12 @@
-package com.service.service;
+package com.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import generator.domain.entity.Product;
 import generator.domain.entity.ProductCategory;
 import generator.domain.demo.Result;
-import generator.domain.product.ProductDTO;
 import generator.domain.product.ProductListVO;
 import generator.domain.product.ProductPageDTO;
-import generator.domain.product.ProductVO;
 
 import java.util.List;
 
@@ -36,14 +34,6 @@ public interface ProductService extends IService<Product> {
      * @return
      */
     Result<List<ProductCategory>> getProductCategories() throws JsonProcessingException;
-
-    /**
-     * 添加商品
-     * 管理员身份验证
-     * @param productDTO
-     * @return
-     */
-    Result<ProductVO> addProducts(ProductDTO productDTO);
 
 
 }

@@ -81,6 +81,22 @@ public class Orders {
     private String info;
 
     /**
+     * 物流公司：
+     */
+    @TableField(value = "logistics_company")
+    @ApiModelProperty("物流公司：")
+    @Size(max= 200,message="编码长度不能超过200")
+    private String logisticsCompany;
+
+    /**
+     * 物流单号
+     */
+    @TableField(value = "logistics_no")
+    @ApiModelProperty("物流单号")
+    @Size(max= 200,message="编码长度不能超过200")
+    private String logisticsNo;
+
+    /**
      * 下单时间
      */
     @TableField(value = "create_time")

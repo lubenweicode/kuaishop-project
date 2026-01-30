@@ -1,6 +1,6 @@
 package com.controller;
 
-import com.service.service.AddressService;
+import com.service.AddressService;
 import generator.domain.address.AddressDTO;
 import generator.domain.context.UserContext;
 import generator.domain.demo.Result;

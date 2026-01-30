@@ -63,7 +63,8 @@ mybatis-plus:
 
 # JWT通用配置（生产默认开启）
 jwt:
-  expire: 3600000  # 1小时（毫秒）
+  # 7 天
+  expire: 604800
   sign-key: uNivjsEvr9aUNhpKahuChoGmsjaOdYSB   # 密钥（≥32字符）
   interceptor:
     enable: true # 生产环境开启

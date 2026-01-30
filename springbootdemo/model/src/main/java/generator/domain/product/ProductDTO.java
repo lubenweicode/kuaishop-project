@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @Data
 public class ProductDTO {
@@ -30,12 +31,12 @@ public class ProductDTO {
     private Integer stock; // 商品库存
 
     @NotNull(message = "商品分类ID不能为空")
-    private Integer categoryId; // 商品分类ID
+    private Long categoryId; // 商品分类ID
 
     @NotNull(message = "商品图片不能为空")
     private List<String> images; // 商品图片
 
     @NotNull(message = "商品规格不能为空")
-    private List<Specification> specifications; // 商品规格
+    private List<Map<String,String>> specifications; // 商品规格
     private Integer status=1; // 商品状态
 }

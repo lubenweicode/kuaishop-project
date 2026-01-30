@@ -9,7 +9,7 @@ import generator.domain.demo.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.service.service.CartService;
+import com.service.CartService;
 
 import java.util.List;
 

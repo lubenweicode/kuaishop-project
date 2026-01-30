@@ -1,9 +1,9 @@
-package com.service;
+package com.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mapper.AuthMapper;
-import com.service.service.AuthService;
+import com.service.AuthService;
 import com.utils.JwtUtil;
 import com.utils.Sha256Util;
 import generator.domain.entity.User;

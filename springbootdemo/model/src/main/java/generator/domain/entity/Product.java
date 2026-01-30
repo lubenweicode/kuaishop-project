@@ -1,5 +1,8 @@
 package generator.domain.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,12 +13,15 @@ import org.hibernate.validator.constraints.Length;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
 * 商品表
 * @TableName product
 */
 @Data
+@TableName(value = "product", autoResultMap = true)
 public class Product implements Serializable {
 
     /**
@@ -87,12 +93,14 @@ public class Product implements Serializable {
     * 详情图数组
     */
     @ApiModelProperty("详情图数组")
-    private Object images;
+    @TableField(typeHandler = com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler.class)
+    private List<String> images;
     /**
     * 规格参数
     */
     @ApiModelProperty("规格参数")
-    private Object specifications;
+    @TableField(value = "specifications")
+    private List<Map<String,String>> specifications;
     /**
     * 状态：0-下架 1-上架
     */
