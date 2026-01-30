@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class TestController {
 
-    @Autowired
-    private UserRateLimiter userRateLimiter;
+    private final UserRateLimiter userRateLimiter;
+
+    public TestController(UserRateLimiter userRateLimiter) {
+        this.userRateLimiter = userRateLimiter;
+    }
 
     @GetMapping("/ping")
     public Result<String> ping(){

@@ -53,7 +53,7 @@ public class ProductController {
 
     /**
      * 商品详情
-     * @param id
+     * @param id 商品ID
      * @return
      */
     @GetMapping("/{id}")
@@ -61,6 +61,10 @@ public class ProductController {
         return productService.getProductById(id);
     }
 
+    /**
+     * 商品分类列表
+     * @return
+     */
     @GetMapping("/categories")
     public Result<List<ProductCategory>> getProductCategories() throws JsonProcessingException {
         return productService.getProductCategories();

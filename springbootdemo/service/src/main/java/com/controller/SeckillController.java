@@ -20,6 +20,10 @@ public class SeckillController {
         this.seckillActivityService = seckillActivityService;
     }
 
+    /**
+     * 获取秒杀活动列表
+     * @param statusStr 状态 0:创建中 1:进行中 2:已结束
+     */
     @GetMapping("/activities")
     public Result<List<SeckillActivityVO>> getSeckillActivities(@RequestParam("status")String statusStr) {
         Integer status = null;

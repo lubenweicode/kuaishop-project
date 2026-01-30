@@ -15,7 +15,9 @@ import generator.domain.product.ProductListVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -50,54 +52,125 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Override
     public Result<ProductListVO> getProducts(ProductPageDTO productDTO) throws JsonProcessingException  {
         // 1.构建唯一缓存键(仅包含非默认/非空参数)
-        String cacheKey = buildCacheKey(productDTO);
+        String conditionCacheKey = buildCacheKey(productDTO);
 
-        // 2.优先查询Redis缓存
+        // 2.优先查询Redis【条件缓存】
+        List<Long> productIdList = null;
         try{
-            String cacheValue = redisTemplate.opsForValue().get(cacheKey);
+            String cacheValue = redisTemplate.opsForValue().get(conditionCacheKey);
             if(cacheValue != null && !cacheValue.isEmpty()){
-                List< Product> products = objectMapper.readValue(cacheValue, new TypeReference<List<Product>>(){});
-                log.info("从Redis缓存中获取数据成功,缓存键:{}",cacheKey);
-                ProductListVO productListVO = new ProductListVO();
-                productListVO.setRecords(products);
-                productListVO.setTotal((long) products.size());
-                productListVO.setPage(productDTO.getPage());
-                productListVO.setSize(productDTO.getSize());
-                productListVO.setCurrent(productDTO.getPage());
-                return Result.success(productListVO);
+                productIdList = objectMapper.readValue(cacheValue, new TypeReference<List<Long>>() {
+                });
+                log.info("Redis缓存命中，缓存键：{}，缓存值：{}", conditionCacheKey, cacheValue);
             }
         }catch (JsonProcessingException e){
-            log.info("Redis缓存反序列化失败，缓存键：{}，异常：{}", cacheKey, e.getMessage(), e);
+            log.error("Redis缓存反序列化失败，缓存键：{}，异常：{}", conditionCacheKey, e.getMessage(), e);
         }catch (Exception e){
-            log.error("Redis缓存查询异常，缓存键：{}，异常：{}", cacheKey, e.getMessage(), e);
+            log.error("Redis缓存查询异常，缓存键：{}，异常：{}", conditionCacheKey, e.getMessage(), e);
         }
 
-        // 3.查询数据库
-        List<Product> productList = null;
-        try{
-            productList = productMapper.selectByCondition(productDTO);
-            log.info("从数据库中获取数据成功,缓存键:{}",cacheKey);
-        }catch (Exception e){
-            log.error("从数据库中获取数据失败,缓存键:{}",cacheKey,e);
-            return Result.error(500,"商品列表查询失败");
+        // 3.根据ID列表查询单个商品缓存,批量获取提升效率
+        List<Product> productList = new ArrayList<>();
+        List<Long> unHitProductIdList = new ArrayList<>();
+
+        if(!CollectionUtils.isEmpty(productIdList)){
+            // 3.1 构建单个商品缓存键列表,批量查询Redis
+            List<String> productCacheKeys = productIdList.stream()
+                    .map(productId -> PRODUCT_CACHE_KEY_PREFIX + productId)
+                    .collect(Collectors.toList());
+            List<String> productCacheValues = redisTemplate.opsForValue().multiGet(productCacheKeys);
+
+            // 3.2 解析缓存结果,分离命中/未命中
+            for(int i = 0; i < productIdList.size(); i++){
+                Long currentProductId = productIdList.get(i);
+                String currentCacheValue = productCacheValues.get(i);
+
+                if(currentCacheValue != null && !currentCacheValue.isEmpty()){
+                    try {
+                        Product product = objectMapper.readValue(currentCacheValue, Product.class);
+                        productList.add(product);
+                        log.info("Redis缓存命中，缓存键：{}，缓存值：{}", productCacheKeys.get(i), productCacheValues.get(i));
+                    }catch (JsonProcessingException e){
+                        log.error("Redis缓存反序列化失败，缓存键：{}，异常：{}", productCacheKeys.get(i), e.getMessage(), e);
+                        unHitProductIdList.add(currentProductId);
+                    }
+                }else{
+                    unHitProductIdList.add(currentProductId);
+                }
+            }
         }
 
-        // 4.将数据库结果存入Redis
-        try{
-            String cacheValue = objectMapper.writeValueAsString(productList);
-            redisTemplate.opsForValue().set(cacheKey,cacheValue,CACHE_PRODUCT_LIST_EXPIRE_TIME, TimeUnit.MINUTES);
-            log.info("Redis缓存写入成功，缓存键：{}，过期时间：{}分钟", cacheKey, CACHE_PRODUCT_LIST_EXPIRE_TIME);
-        }catch (JsonProcessingException e){
-            log.error("Redis缓存序列化失败，缓存键：{}，异常：{}", cacheKey, e.getMessage(), e);
-        }catch (Exception e){
-            log.error("Redis缓存写入异常，缓存键：{}，异常：{}", cacheKey, e.getMessage(), e);
+        // 4.批量查询数据库
+        List< Product> dbProductList = new ArrayList<>();
+        boolean needRefreshConditionCache = CollectionUtils.isEmpty(productIdList);
+
+        if(needRefreshConditionCache){
+            // 条件缓存未命中,直接从数据库查询符合条件的完整商品列表
+            try{
+                dbProductList = productMapper.selectByCondition(productDTO);
+                log.info("数据库查询完整商品列表成功，条件：{}", productDTO);
+
+                if(!CollectionUtils.isEmpty(dbProductList)){
+                    productIdList = dbProductList.stream()
+                            .map(Product::getId)
+                            .collect(Collectors.toList());
+                }
+            }catch (Exception e){
+                log.error("数据库查询完整商品列表失败，条件：{}，异常：{}", productDTO, e.getMessage(), e);
+                return Result.error(500, "数据库查询完整商品列表失败");
+            }
+        } else if (!CollectionUtils.isEmpty(unHitProductIdList)) {
+
+            try{
+                LambdaQueryWrapper<Product> queryWrapper = new LambdaQueryWrapper<>();
+                queryWrapper.in(Product::getId, unHitProductIdList);
+                dbProductList = this.list(queryWrapper);
+                log.info("数据库查询部分商品列表成功，条件：{}", productDTO);
+            }catch (Exception e){
+                log.error("数据库查询部分商品列表失败，条件：{}，异常：{}", productDTO, e.getMessage(), e);
+                return Result.error(500, "数据库查询部分商品列表失败");
+            }
         }
 
+        // 5.将数据库查询的商品存入Redis缓存
+        if(!CollectionUtils.isEmpty(dbProductList)){
+            for(Product product : dbProductList){
+                if (product == null) continue;
+                try {
+                    String productCacheKey = PRODUCT_CACHE_KEY_PREFIX + product.getId();
+                    String productCacheValue = objectMapper.writeValueAsString(product);
+                    redisTemplate.opsForValue().set(productCacheKey, productCacheValue, CACHE_PRODUCT_ID_EXPIRE_TIME, TimeUnit.MINUTES);
+                    log.debug("Redis单个商品缓存写入成功，商品ID：{}，过期时间：{}分钟", product.getId(), CACHE_PRODUCT_ID_EXPIRE_TIME);
+                }catch (JsonProcessingException e){
+                    log.error("Redis单个商品缓存写入失败，商品ID：{}，异常：{}", product.getId(), e.getMessage(), e);
+                }catch (Exception e){
+                    log.error("Redis单个商品缓存写入异常，商品ID：{}，异常：{}", product.getId(), e.getMessage(), e);
+                }
+            }
+            // 合并数据库查询结果到最终商品列表
+            productList.addAll(dbProductList);
+        }
+
+        // 6.刷新条件缓存
+        if(needRefreshConditionCache && !CollectionUtils.isEmpty(productIdList)){
+            try {
+                String conditionCacheValue = objectMapper.writeValueAsString(productIdList);
+                redisTemplate.opsForValue().set(conditionCacheKey, conditionCacheValue, CACHE_PRODUCT_LIST_EXPIRE_TIME, TimeUnit.MINUTES);
+                log.debug("Redis条件缓存写入成功，条件：{}，过期时间：{}分钟", productDTO, CACHE_PRODUCT_LIST_EXPIRE_TIME);
+            }catch (JsonProcessingException e){
+                log.error("Redis条件缓存写入失败，条件：{}，异常：{}", productDTO, e.getMessage(), e);
+            }catch (Exception e){
+                log.error("Redis条件缓存写入异常，条件：{}，异常：{}", productDTO, e.getMessage(), e);
+            }
+        }
+
+        // 7.封装返回结果
         ProductListVO productListVO = new ProductListVO();
         productListVO.setRecords(productList);
-        productListVO.setTotal((long) productList.size());
-        productListVO.setPage(productDTO.getPage());
+        productListVO.setTotal(CollectionUtils.isEmpty(productIdList) ? 0L : (long) productIdList.size());
         productListVO.setSize(productDTO.getSize());
+        productListVO.setPage(productDTO.getPage());
+        productListVO.setCurrent(productDTO.getPage());
 
         return Result.success(productListVO);
     }

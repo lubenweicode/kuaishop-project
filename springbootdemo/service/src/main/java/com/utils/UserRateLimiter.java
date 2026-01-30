@@ -23,8 +23,11 @@ public class UserRateLimiter {
     private static final int MAX_REQUESTS = 5; // 最大请求数
     private static final long TIME_WINDOW = 10 * 1000; // 时间窗口：10秒（毫秒）
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
+
+    public UserRateLimiter(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
 
     /**
      * 判断单个用户是否允许请求

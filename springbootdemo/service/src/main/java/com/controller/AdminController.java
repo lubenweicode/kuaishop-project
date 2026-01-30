@@ -85,7 +85,7 @@ public class AdminController {
 
     /**
      * 添加秒杀活动
-     * @param seckillActivity
+     * @param seckillActivity 秒杀活动
      * @return
      */
     @PostMapping("/seckill/activity")

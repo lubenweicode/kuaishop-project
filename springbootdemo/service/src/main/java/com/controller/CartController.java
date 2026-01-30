@@ -28,6 +28,8 @@ public class CartController {
 
     /**
      * 添加购物车项
+     * @param cartAddItem 购物车项
+     * return
      */
     @PostMapping("/items")
     public Result<Void> addCartItem(HttpServletRequest  request,@RequestBody CartAddItem cartAddItem){
@@ -48,6 +50,7 @@ public class CartController {
 
     /**
      * 获取购物车项
+     * return
      */
     @GetMapping("/items")
     public Result<List<CartItemVO>> getCartItems(){
@@ -57,6 +60,9 @@ public class CartController {
 
     /**
      * 修改购物车项数量
+     * @param itemId 购物车项ID
+     * @param cartAddItem 购物车项
+     * return
      */
     @PutMapping("/items/{itemId}")
     public Result<Void> updateCartItem(@PathVariable Integer itemId,@RequestBody CartAddItem cartAddItem){
@@ -66,6 +72,7 @@ public class CartController {
 
     /**
      * 删除购物车项
+     * @param itemId 购物车项ID
      */
     @DeleteMapping("/items/{itemId}")
     public Result<Void> deleteCartItem(@PathVariable Integer itemId){

@@ -14,19 +14,37 @@ import java.util.Map;
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthService authService;
+   private final AuthService authService;
 
+   public AuthController(AuthService authService) {
+       this.authService = authService;
+   }
+
+   /**
+    * 注册
+    * @param registerAuthDTO 注册参数
+    * @return
+    */
     @PostMapping("/register")
     public Result<Object> register(@RequestBody RegisterAuthDTO registerAuthDTO){
         return authService.register(registerAuthDTO);
     }
 
+    /**
+     * 登录
+     * @param loginAuthDTO 登录参数
+     * @return
+     */
     @PostMapping("/login")
     public Result<Map<String,Object>> login(@RequestBody LoginAuthDTO loginAuthDTO){
         return authService.login(loginAuthDTO);
     }
 
+    /**
+     * 获取当前用户信息
+     * @param authorization 授权信息
+     * @return
+     */
     @GetMapping("/me")
     public Result<UserInfoVO> getCurrentUser(@RequestHeader(value = "Authorization", required = false) String authorization){
         return authService.getCurrentUser(authorization);

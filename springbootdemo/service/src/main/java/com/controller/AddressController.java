@@ -18,7 +18,7 @@ public class AddressController {
 
     /**
      * 添加地址
-     * @param addressDTO
+     * @param addressDTO 添加地址参数
      * @return
      */
     @PostMapping
@@ -39,7 +39,7 @@ public class AddressController {
 
     /**
      * 设置默认地址
-     * @param id
+     * @param id 地址ID
      * @return
      */
     @PutMapping("/{id}/default")
