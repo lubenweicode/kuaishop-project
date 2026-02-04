@@ -7,7 +7,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import com.alibaba.fastjson.JSON;
 import lombok.Data;
+
 
 /**
  * 秒杀商品关联表
@@ -90,4 +94,14 @@ public class SeckillProduct implements Serializable {
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
+
+   public String toInfo() {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("productId", productId);
+        map.put("productName", productName);
+        map.put("price", seckillPrice);
+        map.put("quantity", 1);
+        return JSON.toJSONString(map);
+    }
 }

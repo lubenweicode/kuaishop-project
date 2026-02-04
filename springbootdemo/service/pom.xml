@@ -94,6 +94,12 @@
             <artifactId>commons-pool2</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <version>3.27.0</version>
+        </dependency>
+
         <!-- Guava 依赖（从父模块版本管理继承） -->
         <dependency>
             <groupId>com.google.guava</groupId>

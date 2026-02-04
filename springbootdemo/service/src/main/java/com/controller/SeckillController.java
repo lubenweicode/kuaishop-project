@@ -1,13 +1,13 @@
 package com.controller;
 
 import com.service.SeckillActivityService;
+import generator.domain.context.UserContext;
 import generator.domain.demo.Result;
 import generator.domain.entity.SeckillActivity;
+import generator.domain.order.OrderVO;
 import generator.domain.seckill.SeckillActivityVO;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import generator.domain.seckill.SeckillOrderAddDTO;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,5 +38,11 @@ public class SeckillController {
             status = 1;
         }
         return seckillActivityService.getSeckillActivities(status);
+    }
+
+    @PostMapping("/order")
+    public Result<OrderVO> createSeckillOrder(@RequestBody SeckillOrderAddDTO seckillOrderAddDTO) {
+        Long userId = UserContext.getUserId();
+        return seckillActivityService.createSeckillOrder(userId,seckillOrderAddDTO);
     }
 }

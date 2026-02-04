@@ -1,5 +1,6 @@
 package generator.domain.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -35,6 +36,7 @@ public class SeckillActivity implements Serializable {
      */
     @ApiModelProperty("活动开始时间")
     @TableField(value = "start_time")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
 
     /**
@@ -42,6 +44,7 @@ public class SeckillActivity implements Serializable {
      */
     @ApiModelProperty("活动结束时间")
     @TableField(value = "end_time")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
 
     /**

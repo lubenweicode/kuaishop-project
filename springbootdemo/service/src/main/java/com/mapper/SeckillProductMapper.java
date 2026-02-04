@@ -20,17 +20,6 @@ import java.util.List;
 public interface SeckillProductMapper extends BaseMapper<SeckillProduct> {
 
 
-    @Insert("INSERT INTO seckill_product(" +
-            "product_id, product_name, seckill_price, original_price, total_stock, limit_per_user" +
-            ") VALUES (" +
-            "#{productId}, #{productName}, #{seckillPrice}, #{originalPrice}, #{totalStock}, #{limitPerUser}" +
-            ")")
-    void insert(SeckillProductVO seckillProductVO);
-    
-
-    @Select("SELECT COUNT(*) FROM seckill_product")
-    long selectCount(LambdaQueryWrapper<SeckillProductVO> seckillProductQueryWrapper);
-
 
     boolean insertBatch(List<SeckillProduct> seckillProductList);
 }

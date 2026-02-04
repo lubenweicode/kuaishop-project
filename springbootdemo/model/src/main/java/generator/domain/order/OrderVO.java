@@ -14,7 +14,8 @@ public class OrderVO {
     private BigDecimal totalAmount; // 订单总金额
     private BigDecimal payAmount; // 实付金额
     private Integer status; // 订单状态
-    private Integer statusText; // 订单状态文本
+    private String statusText; // 订单状态文本
+    private String info; // 订单信息
     private String remark; // 订单备注
     private String receiverName; // 收货人
     private String receiverPhone; // 收货人电话

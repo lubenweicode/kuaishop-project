@@ -3,7 +3,9 @@ package com.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import generator.domain.demo.Result;
 import generator.domain.entity.SeckillActivity;
+import generator.domain.order.OrderVO;
 import generator.domain.seckill.SeckillActivityVO;
+import generator.domain.seckill.SeckillOrderAddDTO;
 
 import java.util.List;
 
@@ -15,4 +17,6 @@ import java.util.List;
 public interface SeckillActivityService extends IService<SeckillActivity> {
 
     Result<List<SeckillActivityVO>> getSeckillActivities(Integer status);
+
+    Result<OrderVO> createSeckillOrder(Long userId, SeckillOrderAddDTO seckillOrderAddDTO);
 }

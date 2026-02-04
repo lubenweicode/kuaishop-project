@@ -1,20 +1,33 @@
 package generator.domain.seckill;
 
+import generator.domain.entity.SeckillProduct;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
+/**
+ * 秒杀商品视图对象（VO）
+ * 适配前端展示和秒杀业务逻辑，扩展 SeckillProduct 实体类字段
+ */
 @Data
-public class SeckillProductVO extends generator.domain.entity.SeckillProduct {
+public class SeckillProductVO extends SeckillProduct implements Serializable {
 
-    private Long productId; // 商品ID
-    private Long activityId; // 活动ID
-    private String productName; // 商品名称
-    private BigDecimal seckillPrice; // 秒杀价格
-    private BigDecimal originalPrice; // 原价
-    private Long totalStock; // 库存
-    private Long surplusStock; // 剩余库存
-    private Long sold=0L; // 已售
-    private Integer limitPerUser; // 每人限购
+    private static final long serialVersionUID = 1L; // 序列化版本号，避免反序列化异常
+
+    /**
+     * 剩余库存（秒杀过程中动态更新）
+     */
+    private Long surplusStock;
+
+    /**
+     * 已售数量（默认 0）
+     */
+    private Long sold = 0L;
+
+    /**
+     * 每人限购数量
+     */
+    private Integer limitPerUser;
 
 }

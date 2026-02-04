@@ -32,6 +32,11 @@ public class Orders {
     @Size(max= 32,message="编码长度不能超过32")
     private String orderNo;
 
+    @TableField(value = "activity_id",exist = false)
+    @ApiModelProperty("活动ID")
+    @Size(max= 32,message="编码长度不能超过32")
+    private Long activityId;
+
     /**
      * 用户ID
      */
@@ -39,6 +44,7 @@ public class Orders {
     @ApiModelProperty("用户ID")
     @Size(max= 32,message="编码长度不能超过32")
     private Long userId;
+
 
     /**
      * 实付金额
@@ -104,6 +110,14 @@ public class Orders {
     @Size(max= 19,message="编码长度不能超过19")
     private Date createTime;
 
+    /**
+     * 修改时间
+     */
+    @TableField(value = "update_time")
+    @ApiModelProperty("修改时间")
+    @Size(max= 19,message="编码长度不能超过19")
+    private Date updateTime;
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -157,6 +171,10 @@ public class Orders {
     }
 
     public void setTotalAmount(BigDecimal totalAmount) {
+    }
+
+
+    public void setUpdateTime(Date date) {
     }
 
 
