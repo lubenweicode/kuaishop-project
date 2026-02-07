@@ -20,6 +20,10 @@
     <dependencies>
         <!-- 使用父 pom 中统一管理的版本，避免版本冲突 -->
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-annotation</artifactId>
         </dependency>

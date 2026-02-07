@@ -4,7 +4,6 @@ import generator.domain.entity.SeckillProduct;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 /**
  * 秒杀商品视图对象（VO）

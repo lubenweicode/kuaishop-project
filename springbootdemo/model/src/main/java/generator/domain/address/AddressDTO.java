@@ -2,7 +2,6 @@ package generator.domain.address;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import org.apache.ibatis.annotations.Options;
 
 @Data
 public class AddressDTO {

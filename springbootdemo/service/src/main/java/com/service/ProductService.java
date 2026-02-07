@@ -2,9 +2,9 @@ package com.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import generator.domain.demo.Result;
 import generator.domain.entity.Product;
 import generator.domain.entity.ProductCategory;
-import generator.domain.demo.Result;
 import generator.domain.product.ProductListVO;
 import generator.domain.product.ProductPageDTO;
 

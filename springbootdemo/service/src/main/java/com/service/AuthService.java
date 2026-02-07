@@ -1,11 +1,11 @@
 package com.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import generator.domain.entity.User;
 import generator.domain.auth.LoginAuthDTO;
 import generator.domain.auth.RegisterAuthDTO;
 import generator.domain.auth.UserInfoVO;
 import generator.domain.demo.Result;
+import generator.domain.entity.User;
 
 import java.util.Map;
 

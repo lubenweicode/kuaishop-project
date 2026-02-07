@@ -3,7 +3,6 @@ package generator.domain.seckill;
 import generator.domain.entity.SeckillActivity;
 import lombok.Data;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 

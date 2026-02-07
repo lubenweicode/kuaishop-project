@@ -5,11 +5,14 @@ import generator.domain.auth.LoginAuthDTO;
 import generator.domain.auth.RegisterAuthDTO;
 import generator.domain.auth.UserInfoVO;
 import generator.domain.demo.Result;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+/**
+ * 认证接口
+ */
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -26,7 +29,7 @@ public class AuthController {
     * @return
     */
     @PostMapping("/register")
-    public Result<Object> register(@RequestBody RegisterAuthDTO registerAuthDTO){
+    public Result<Object> register(@Valid @RequestBody RegisterAuthDTO registerAuthDTO){
         return authService.register(registerAuthDTO);
     }
 
@@ -36,7 +39,7 @@ public class AuthController {
      * @return
      */
     @PostMapping("/login")
-    public Result<Map<String,Object>> login(@RequestBody LoginAuthDTO loginAuthDTO){
+    public Result<Map<String,Object>> login(@Valid @RequestBody LoginAuthDTO loginAuthDTO){
         return authService.login(loginAuthDTO);
     }
 

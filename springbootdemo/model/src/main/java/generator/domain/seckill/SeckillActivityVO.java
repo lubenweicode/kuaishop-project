@@ -1,6 +1,5 @@
 package generator.domain.seckill;
 
-import generator.domain.entity.SeckillActivity;
 import lombok.Data;
 
 import java.util.Date;

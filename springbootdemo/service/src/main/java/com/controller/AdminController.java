@@ -4,7 +4,6 @@ import com.service.AdminService;
 import generator.domain.context.UserContext;
 import generator.domain.demo.Result;
 import generator.domain.entity.SeckillActivity;
-import generator.domain.entity.SeckillProduct;
 import generator.domain.order.OrderPageVO;
 import generator.domain.product.ProductDTO;
 import generator.domain.product.ProductVO;

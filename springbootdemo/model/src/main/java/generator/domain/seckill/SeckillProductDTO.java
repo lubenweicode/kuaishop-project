@@ -1,6 +1,7 @@
 package generator.domain.seckill;
 
 import lombok.Data;
+
 import java.math.BigDecimal;
 
 @Data

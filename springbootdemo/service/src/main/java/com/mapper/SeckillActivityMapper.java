@@ -2,7 +2,6 @@ package com.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import generator.domain.entity.SeckillActivity;
-import generator.domain.seckill.SeckillActivityVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
