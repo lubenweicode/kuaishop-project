@@ -1,6 +1,3 @@
-我会为你的多模块 Spring Boot 项目编写一份**结构化、专业且易维护的 README.md**，包含项目介绍、依赖关系、快速启动、核心规范等核心内容，你可直接复制到项目根目录，适配 GitHub 展示格式。
-
-```markdown
 # kuaishop-back (快购商城后端)
 基于 Spring Boot 3.x 开发的多模块电商后端项目，包含用户认证、商品管理、订单系统、秒杀活动等核心功能，遵循分层设计与模块化开发规范。
 
@@ -10,10 +7,10 @@
 kuaishop-back/
 ├── springbootdemo (父模块)
 │   ├── model/          # 数据模型层（最底层，无依赖）
-│   ├── common/         # 通用工具层（仅依赖model）
-│   ├── repository/     # 数据访问层（依赖model + common）
-│   ├── service/        # 业务逻辑层（依赖repository + model + common）
-│   ├── controller/     # 接口控制层（依赖service + model + common）
+│   ├── common/         # 通用工具层（仅依赖 model）
+│   ├── repository/     # 数据访问层（依赖 model + common）
+│   ├── service/        # 业务逻辑层（依赖 repository + model + common）
+│   ├── controller/     # 接口控制层（依赖 service + model + common）
 │   └── app/            # 主程序入口（依赖所有业务模块，可选）
 ```
 
@@ -65,7 +62,7 @@ mvn dependency:analyze-report
 #### 方式1：通过app模块启动（推荐）
 ```bash
 # 1. 克隆代码
-git clone https://github.com/你的用户名/kuaishop-back.git
+git clone https://github.com/lubenweicode/kuaishop-back.git
 cd kuaishop-back/springbootdemo
 
 # 2. 编译打包
@@ -73,13 +70,6 @@ mvn clean install
 
 # 3. 启动主程序（app模块）
 cd app
-mvn spring-boot:run
-```
-
-#### 方式2：直接启动service模块（临时）
-```bash
-# 适用于无独立app模块的场景
-cd service
 mvn spring-boot:run
 ```
 
@@ -133,40 +123,3 @@ git commit -m "refactor: 拆解service与controller循环依赖（父模块）"
 - IDE配置文件（.idea/、*.iml）
 - 敏感配置（application*.yml、application*.properties）
 - 日志/临时文件（logs/、*.log）
-
-## 常见问题解决
-### 1. 模块循环依赖
-- 现象：启动时报「Circular dependency detected」或注解处理失败
-- 解决方案：
-  1. 主程序入口独立（app模块），避免放在service模块
-  2. 抽离公共代码到model/common模块，解除反向依赖
-  3. 执行 `mvn dependency:tree` 定位循环依赖模块
-
-### 2. Lua脚本读取失败
-- 现象：启动时报「加载Lua解锁脚本失败」
-- 解决方案：
-  1. 脚本文件放在任意模块的 `src/main/resources/scripts/` 目录
-  2. 通过 `ClassLoader.getResourceAsStream()` 跨模块读取
-  3. 配置兜底脚本，避免文件缺失导致启动失败
-
-### 3. GitHub推送失败
-- 现象：`fatal: 'main' does not appear to be a git repository`
-- 解决方案：
-  1. 修正推送命令：`git push origin master`（远程仓库名是origin，不是main）
-  2. 验证远程仓库关联：`git remote -v`
-  3. 权限问题：HTTPS方式使用个人访问令牌，SSH方式配置密钥
-
-## 许可证
-本项目为学习用途开发，无商业授权，仅供参考。
-```
-
-### 使用说明
-1. 直接复制上述内容到项目根目录的 `README.md` 文件中；
-2. 替换占位符：
-   - `你的用户名`：替换为GitHub账号名；
-   - 版本号（如 `3.2.x`）：替换为项目实际使用的依赖版本；
-   - 接口路径/功能描述：根据项目实际情况调整；
-3. 适配GitHub格式：Markdown语法已兼容GitHub展示，可直接提交到仓库；
-4. 扩展补充：可根据项目新增功能，在「核心功能」「模块职责」等章节补充内容。
-
-这份README包含了开发者最关心的**项目结构、依赖关系、启动方式、问题解决**，既适配新手快速上手，也便于团队协作维护。
