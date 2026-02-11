@@ -47,7 +47,7 @@ mvn dependency:analyze-report
 |-------------------------|------------|--------------------------|----------------|
 | spring-boot-starter-web | 3.2.10      | Web接口、RESTful开发     | controller/app |
 | mybatis-plus-spring-boot3-starter | 3.5.5 | 数据库CRUD、分页、条件查询 | repository     |
-| spring-boot-starter-data-redis | 3.2.x | Redis缓存、分布式锁       | service/common |
+| spring-boot-starter-data-redis | 3.2.10 | Redis缓存、分布式锁       | service/common |
 | lombok                  | 1.18.30     | 简化POJO代码（Getter/Setter） | 所有模块       |
 | commons-lang3           | 3.14.0     | 通用字符串/集合工具       | common         |
 
