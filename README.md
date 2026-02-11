@@ -45,10 +45,10 @@ mvn dependency:analyze-report
 ### 3. 关键第三方依赖
 | 依赖名称                | 版本       | 用途                     | 引入模块       |
 |-------------------------|------------|--------------------------|----------------|
-| spring-boot-starter-web | 3.2.x      | Web接口、RESTful开发     | controller/app |
-| mybatis-plus-spring-boot3-starter | 3.5.x | 数据库CRUD、分页、条件查询 | repository     |
+| spring-boot-starter-web | 3.2.10      | Web接口、RESTful开发     | controller/app |
+| mybatis-plus-spring-boot3-starter | 3.5.5 | 数据库CRUD、分页、条件查询 | repository     |
 | spring-boot-starter-data-redis | 3.2.x | Redis缓存、分布式锁       | service/common |
-| lombok                  | 1.18.x     | 简化POJO代码（Getter/Setter） | 所有模块       |
+| lombok                  | 1.18.30     | 简化POJO代码（Getter/Setter） | 所有模块       |
 | commons-lang3           | 3.14.0     | 通用字符串/集合工具       | common         |
 
 ## 快速启动
@@ -59,7 +59,6 @@ mvn dependency:analyze-report
 - MySQL: 8.0+（业务数据存储）
 
 ### 2. 启动步骤
-#### 方式1：通过app模块启动（推荐）
 ```bash
 # 1. 克隆代码
 git clone https://github.com/lubenweicode/kuaishop-back.git
