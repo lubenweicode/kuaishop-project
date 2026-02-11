@@ -1,6 +1,6 @@
-package com.interceptor;
+package interceptor;
 
-import com.utils.UserRateLimiter;
+import utils.UserRateLimiter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.config;
+package config;
 
 import com.interceptor.JwtInterceptor;
 import com.interceptor.UserRateLimitInterceptor;

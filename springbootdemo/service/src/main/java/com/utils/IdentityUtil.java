@@ -1,4 +1,4 @@
-package com.utils;
+package utils;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.mapper.AuthMapper;

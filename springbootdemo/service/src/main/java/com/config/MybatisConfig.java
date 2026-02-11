@@ -1,4 +1,4 @@
-package com.config;
+package config;
 
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;

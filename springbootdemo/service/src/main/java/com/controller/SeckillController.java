@@ -1,8 +1,8 @@
-package com.controller;
+package controller;
 
 import com.service.SeckillActivityService;
 import generator.domain.context.UserContext;
-import generator.domain.demo.Result;
+import response.Result;
 import generator.domain.order.OrderVO;
 import generator.domain.seckill.SeckillActivityVO;
 import generator.domain.seckill.SeckillOrderAddDTO;

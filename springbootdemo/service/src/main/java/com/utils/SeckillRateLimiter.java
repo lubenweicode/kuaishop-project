@@ -1,4 +1,4 @@
-package com.utils;
+package utils;
 
 import com.google.common.util.concurrent.RateLimiter;
 import org.springframework.stereotype.Component;

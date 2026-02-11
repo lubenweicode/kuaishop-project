@@ -1,4 +1,4 @@
-package com.utils;
+package utils;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;

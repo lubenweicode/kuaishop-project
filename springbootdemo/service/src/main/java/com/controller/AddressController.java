@@ -1,9 +1,9 @@
-package com.controller;
+package controller;
 
 import com.service.AddressService;
 import generator.domain.address.AddressDTO;
 import generator.domain.context.UserContext;
-import generator.domain.demo.Result;
+import response.Result;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

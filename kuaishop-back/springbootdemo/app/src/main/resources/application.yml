@@ -1,0 +1,96 @@
+spring:
+  application:
+    name: demo-application
+
+  # 数据源配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/quickshop?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # JPA配置（如果不用JPA可删除）
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+  # 日志配置
+  output:
+    ansi:
+      enabled: always
+
+  # Redis配置（无密码情况）
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      # password:  # 注释掉或删除这一行，不要设置空字符串
+      database: 0
+      timeout: 10000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1ms
+
+# Redisson 完整单节点配置（无密码情况）
+redisson:
+  singleServerConfig:
+    address: redis://localhost:6379  # 必须指定redis协议和端口
+    database: 0  # 与Spring Redis的database保持一致，避免数据混乱
+    # password: null  # 如果Redis没有密码，不要设置这一行
+    connectionPoolSize: 10  # 连接池大小
+    connectionMinimumIdleSize: 5  # 最小空闲连接数
+    idleConnectionTimeout: 10000
+    connectTimeout: 10000
+    timeout: 3000
+  codec:
+    class: org.redisson.codec.JsonJacksonCodec  # 序列化方式
+
+# 服务器配置
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1
+
+# 日志配置
+logging:
+  level:
+    root: INFO
+    com.example: DEBUG
+  file:
+    name: logs/application.log
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx"
+
+# MyBatis-Plus配置
+mybatis-plus:
+  type-aliases-package: com.example.demo.entity # 改为你的实体类包名
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# JWT通用配置（生产默认开启）
+jwt:
+  expire: 604800 # 过期时间
+  sign-key: uNivjsEvr9aUNhpKahuChoGmsjaOdYSB   # 密钥（≥32字符）
+  interceptor:
+    enable: true # 生产环境开启
+
+rate-limit:
+  interceptor:
+    # 注意：这里是上下文内的路径（/api/v1 之后的部分），无需加 /api/v1 前缀
+    include-paths:
+      - /cart    # 对应实际路径：/api/v1/cart
+      - /order   # 对应实际路径：/api/v1/order
+    exclude-paths:
+      - /auth/login    # 对应实际路径：/api/v1/auth/login
+      - /auth/register # 对应实际路径：/api/v1/auth/register
+      - /auth/logout   # 对应实际路径：/api/v1/auth/logout
+      - /products      # 对应实际路径：/api/v1/products
+      - /products/*    # 对应实际路径：/api/v1/products/*

@@ -1,4 +1,4 @@
-package com.mapper;
+package mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import generator.domain.entity.Address;

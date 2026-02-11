@@ -1,7 +1,7 @@
-package com.interceptor;
+package interceptor;
 
 import com.alibaba.fastjson.JSONObject;
-import com.utils.JwtUtil;
+import utils.JwtUtil;
 import generator.domain.context.UserContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

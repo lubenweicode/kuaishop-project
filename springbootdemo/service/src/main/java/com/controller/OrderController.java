@@ -1,8 +1,8 @@
-package com.controller;
+package controller;
 
 import com.service.OrderService;
 import generator.domain.context.UserContext;
-import generator.domain.demo.Result;
+import response.Result;
 import generator.domain.order.OrderCreateDTO;
 import generator.domain.order.OrderPageVO;
 import generator.domain.order.OrderVO;
