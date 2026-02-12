@@ -2,6 +2,7 @@ package generator.domain.cart;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -12,6 +13,6 @@ public class CartItem {
     private Long productId;
     private Integer quantity;
     private Integer selected;
-    private Date createTime;
-    private Date updateTime;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
 }

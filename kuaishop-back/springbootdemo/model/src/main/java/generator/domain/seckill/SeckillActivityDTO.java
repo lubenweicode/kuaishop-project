@@ -1,8 +1,8 @@
 package generator.domain.seckill;
 
-import generator.domain.entity.SeckillActivity;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -17,17 +17,5 @@ public class SeckillActivityDTO {
     private List<SeckillProductDTO> products; // 秒杀商品
     private Date createTime; // 创建时间
     private Date updateTime; // 修改时间
-
-    public static SeckillActivityDTO from(SeckillActivity seckillActivity) {
-        SeckillActivityDTO seckillActivityDTO = new SeckillActivityDTO();
-        seckillActivityDTO.setId(seckillActivity.getId());
-        seckillActivityDTO.setActivityName(seckillActivity.getActivityName());
-        seckillActivityDTO.setStartTime(seckillActivity.getStartTime());
-        seckillActivityDTO.setEndTime(seckillActivity.getEndTime());
-        seckillActivityDTO.setStatus(seckillActivity.getStatus());
-        seckillActivityDTO.setCreateTime(seckillActivity.getCreateTime());
-        seckillActivityDTO.setUpdateTime(seckillActivity.getUpdateTime());
-        return seckillActivityDTO;
-    }
 
 }

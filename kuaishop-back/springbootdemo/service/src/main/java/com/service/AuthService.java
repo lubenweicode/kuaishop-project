@@ -12,7 +12,7 @@ import java.util.Map;
 public interface AuthService extends IService<User> {
     Result<Object> register(RegisterAuthDTO registerAuthDTO);
 
-    Result<Map<String, Object>> login(LoginAuthDTO loginAuthDTO);
+    Result<Map<String, Object>> login(LoginAuthDTO loginAuthDTO, String clientIp);
 
     Result<UserInfoVO> getCurrentUser(String authorization);
 }

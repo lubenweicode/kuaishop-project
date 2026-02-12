@@ -81,10 +81,10 @@ public class SecurityUtilsTest {
         String wrongPassword = "654321";
 
         // 1. 测试纯文本SHA256加密
-        String encryptedPwd = Sha256Util.encrypt(originalPassword);
-        assertNotNull(encryptedPwd, "纯文本加密结果不能为空");
-        assertEquals(64, encryptedPwd.length(), "SHA256加密结果应该是64位16进制字符串");
-        System.out.println("纯文本SHA256加密结果：" + encryptedPwd);
+//        String encryptedPwd = Sha256Util.encrypt(originalPassword);
+//        assertNotNull(encryptedPwd, "纯文本加密结果不能为空");
+//        assertEquals(64, encryptedPwd.length(), "SHA256加密结果应该是64位16进制字符串");
+//        System.out.println("纯文本SHA256加密结果：" + encryptedPwd);
 
         // 2. 测试生成随机盐值
         String salt = Sha256Util.generateSalt();

@@ -7,8 +7,10 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -30,93 +32,98 @@ public class Orders {
      */
     @TableField(value = "order_no")
     @ApiModelProperty("订单号")
-    @Size(max = 32, message = "编码长度不能超过32")
+    @Length(max = 32, message = "编码长度不能超过32")
     private String orderNo;
 
-    @TableField(value = "activity_id", exist = false)
+    /**
+     * 活动ID
+     */
     @ApiModelProperty("活动ID")
-    @Size(max = 32, message = "编码长度不能超过32")
+    @Length(max = 32, message = "编码长度不能超过32")
+    @TableField(value = "activity_id", exist = false)
     private Long activityId;
 
     /**
      * 用户ID
      */
-    @TableField(value = "user_id")
     @ApiModelProperty("用户ID")
-    @Size(max = 32, message = "编码长度不能超过32")
+    @Length(max = 32, message = "编码长度不能超过32")
+    @TableField(value = "user_id")
     private Long userId;
 
 
     /**
      * 实付金额
      */
-    @TableField(value = "pay_amount")
     @ApiModelProperty("实付金额")
-    @Size(max = 10, message = "编码长度不能超过10")
+    @Length(max = 10, message = "编码长度不能超过10")
+    @TableField(value = "pay_amount")
     private BigDecimal payAmount;
 
     /**
      * 总金额
      */
-    @TableField(value = "total_amount", exist = false)
     @ApiModelProperty("总金额")
-    @Size(max = 10, message = "编码长度不能超过10")
+    @Length(max = 10, message = "编码长度不能超过10")
+    @TableField(value = "total_amount", exist = false)
     private BigDecimal totalAmount;
 
     /**
      * 状态：0-待支付 1-已支付 2-已发货 3-已完成 4-已取消
      */
-    @TableField(value = "order_status")
+
     @ApiModelProperty("状态：0-待支付 1-已支付 2-已发货 3-已完成 4-已取消")
-    @Size(max = 1, message = "编码长度不能超过1")
+    @Length(max = 1, message = "编码长度不能超过1")
+    @TableField(value = "order_status")
     private Integer orderStatus;
 
     /**
      * 原因
      */
-    @TableField(value = "reason")
     @ApiModelProperty("原因")
-    @Size(max = 200, message = "编码长度不能超过200")
+    @Length(max = 200, message = "编码长度不能超过200")
+    @TableField(value = "reason")
     private String reason;
 
     /**
      * 订单详情：数量、类型等
      */
-    @TableField(value = "info")
+
     @ApiModelProperty("订单详情：数量、类型等")
-    @Size(max = 200, message = "编码长度不能超过200")
+    @Length(max = 200, message = "编码长度不能超过200")
+    @TableField(value = "info")
     private String info;
 
     /**
      * 物流公司：
      */
-    @TableField(value = "logistics_company")
     @ApiModelProperty("物流公司：")
-    @Size(max = 200, message = "编码长度不能超过200")
+    @Length(max = 200, message = "编码长度不能超过200")
+    @TableField(value = "logistics_company")
     private String logisticsCompany;
 
     /**
      * 物流单号
      */
-    @TableField(value = "logistics_no")
     @ApiModelProperty("物流单号")
-    @Size(max = 200, message = "编码长度不能超过200")
+    @Length(max = 200, message = "编码长度不能超过200")
+    @TableField(value = "logistics_no")
     private String logisticsNo;
 
     /**
      * 下单时间
      */
-    @TableField(value = "create_time")
     @ApiModelProperty("下单时间")
-    @Size(max = 19, message = "编码长度不能超过19")
+    @Length(max = 19, message = "编码长度不能超过19")
+    @TableField(value = "create_time")
     private Date createTime;
 
     /**
      * 修改时间
      */
-    @TableField(value = "update_time")
     @ApiModelProperty("修改时间")
-    @Size(max = 19, message = "编码长度不能超过19")
+    @Length(max = 19, message = "编码长度不能超过19")
+    @TableField(value = "update_time")
     private Date updateTime;
 
     @Override

@@ -23,20 +23,14 @@ public class Sha256Util {
      * @return 16进制字符串格式的盐值
      */
     public static String generateSalt() {
+        // 创建随机数生成器
         SecureRandom random = new SecureRandom();
+        // 创建盐值字节数组
         byte[] salt = new byte[16];
+        // 填充盐值
         random.nextBytes(salt);
+        // 将盐值转换为16进制字符串
         return bytesToHex(salt);
-    }
-
-    /**
-     * SHA256纯文本加密
-     *
-     * @param text 需要加密的文本
-     * @return 加密后的16进制字符串
-     */
-    public static String encrypt(String text) {
-        return encrypt(text, null);
     }
 
     /**
@@ -48,33 +42,20 @@ public class Sha256Util {
      */
     public static String encrypt(String text, String salt) {
         try {
+            // 创建MessageDigest对象
             MessageDigest digest = MessageDigest.getInstance(ALGORITHM);
+            // 重置MessageDigest对象
             digest.reset();
-
             // 拼接盐值（如果有）
             String content = salt == null ? text : text + salt;
-
             // 执行加密
-            byte[] hash = digest.digest(content.getBytes(StandardCharsets.UTF_8));
-
+            byte[] bytes = digest.digest(text.getBytes(StandardCharsets.UTF_8));
+            byte[] hash = digest.digest(bytes);
             // 转换为16进制字符串
             return bytesToHex(hash);
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("SHA256加密算法不存在", e);
         }
-    }
-
-    /**
-     * 验证加密文本是否匹配（带盐值）
-     *
-     * @param originalText  原始文本
-     * @param encryptedText 加密后的文本
-     * @param salt          盐值
-     * @return true：匹配；false：不匹配
-     */
-    public static boolean verify(String originalText, String encryptedText, String salt) {
-        String newEncrypted = encrypt(originalText, salt);
-        return newEncrypted.equalsIgnoreCase(encryptedText);
     }
 
     /**
@@ -86,6 +67,7 @@ public class Sha256Util {
     private static String bytesToHex(byte[] bytes) {
         StringBuilder hexString = new StringBuilder();
         for (byte b : bytes) {
+            // 将字节转换为16进制字符串
             String hex = Integer.toHexString(0xff & b);
             if (hex.length() == 1) {
                 hexString.append('0');

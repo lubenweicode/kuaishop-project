@@ -401,8 +401,8 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, User> implements 
 
         try {
 
-            Date startTime;
-            Date endTime;
+            Date startTime = null;
+            Date endTime = null;
 
             try {
                 startTime = DateUtil.strToDateTime(String.valueOf(seckillActivityDTO.getStartTime()));

@@ -1,10 +1,12 @@
 package com.controller;
 
 import com.service.AuthService;
+import com.utils.IpUtil;
 import generator.domain.auth.LoginAuthDTO;
 import generator.domain.auth.RegisterAuthDTO;
 import generator.domain.auth.UserInfoVO;
 import generator.domain.response.Result;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,8 +43,9 @@ public class AuthController {
      * @return
      */
     @PostMapping("/login")
-    public Result<Map<String, Object>> login(@Valid @RequestBody LoginAuthDTO loginAuthDTO) {
-        return authService.login(loginAuthDTO);
+    public Result<Map<String, Object>> login(@Valid @RequestBody LoginAuthDTO loginAuthDTO, HttpServletRequest  request) {
+        String clientIp = IpUtil.getClientIp(request);
+        return authService.login(loginAuthDTO, clientIp);
     }
 
     /**

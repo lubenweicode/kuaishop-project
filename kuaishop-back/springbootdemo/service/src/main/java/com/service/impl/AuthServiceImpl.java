@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.constant.Seckill.AdminConstants;
 import com.repository.mapper.AuthMapper;
 import com.service.AuthService;
+import com.utils.IpUtil;
 import com.utils.JwtUtil;
 import com.utils.Sha256Util;
 import generator.domain.auth.LoginAuthDTO;
@@ -22,6 +23,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,14 +35,15 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements Au
 
     private final JwtUtil jwtUtil;
     private final StringRedisTemplate redisTemplate;
+    private final IdentityServiceImpl identityService;
 
     private final String CACHE_JWT_TOKEN = "jwt:";
 
-    public AuthServiceImpl(JwtUtil jwtUtil, StringRedisTemplate redisTemplate) {
+    public AuthServiceImpl(JwtUtil jwtUtil, StringRedisTemplate redisTemplate, IdentityServiceImpl identityService) {
         this.jwtUtil = jwtUtil;
         this.redisTemplate = redisTemplate;
+        this.identityService = identityService;
     }
-
     /**
      * 注册
      *
@@ -110,7 +113,8 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements Au
 
         try {
             // 4. 密码加密
-            String pwd = Sha256Util.encrypt(registerAuthDTO.getPassword());
+            String salt = Sha256Util.generateSalt();
+            String pwd = Sha256Util.encrypt(registerAuthDTO.getPassword(),salt);
 
             // 5. 构建用户对象
             User user = new User();
@@ -118,6 +122,7 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements Au
             user.setPassword(pwd);
             user.setEmail(registerAuthDTO.getEmail());
             user.setPhone(registerAuthDTO.getPhone());
+            user.setSalt(salt);
 
             // 6. 保存用户
             boolean saveUser = this.save(user);
@@ -146,7 +151,7 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements Au
      * @return
      */
     @Override
-    public Result<Map<String, Object>> login(LoginAuthDTO loginAuthDTO) {
+    public Result<Map<String, Object>> login(LoginAuthDTO loginAuthDTO,String clientIp) {
         String username = loginAuthDTO.getUsername();
         String password = loginAuthDTO.getPassword();
 
@@ -157,7 +162,7 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements Au
 
         // 2. 第一步：先查询用户名是否存在（仅查用户名，不查密码）
         LambdaQueryWrapper<User> usernameWrapper = new LambdaQueryWrapper<>();
-        usernameWrapper.select(User::getId, User::getUsername)
+        usernameWrapper.select(User::getId, User::getUsername, User::getSalt)
                 .eq(User::getUsername, username);
         User existUser = this.getOne(usernameWrapper);
 
@@ -185,7 +190,7 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements Au
         }
 
         // 4. 密码加密 + 用户校验
-        String encryptedPwd = Sha256Util.encrypt(password);
+        String encryptedPwd = Sha256Util.encrypt(password, existUser.getSalt());
         LambdaQueryWrapper<User> pwdWrapper = new LambdaQueryWrapper<>();
         pwdWrapper.eq(User::getId, existUser.getId());
         pwdWrapper.eq(User::getPassword, encryptedPwd);
@@ -241,6 +246,18 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements Au
             redisTemplate.opsForValue().set(cacheRefreshToken, token, 30, TimeUnit.DAYS);
 
             log.info("用户登录成功，用户ID：{}", existUser.getId());
+
+            // 8. 更新用户登录信息
+            // 8.1 获取客户端真实IP
+            // 8.2 获取当前时间
+            LocalDateTime loginTime = LocalDateTime.now();
+            // 8.3 更新用户表的最后登录时间和IP
+            User updateUser = new User();
+            updateUser.setId(existUser.getId());
+            updateUser.setLastLoginTime(loginTime);
+            updateUser.setLastLoginIp(clientIp);
+            this.updateById(updateUser);
+
             return Result.success(result);
 
         } catch (RedisConnectionFailureException e) {

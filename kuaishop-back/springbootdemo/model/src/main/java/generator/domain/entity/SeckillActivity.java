@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -24,6 +25,7 @@ public class SeckillActivity implements Serializable {
     /**
      * 秒杀活动ID
      */
+    @ApiModelProperty("秒杀活动ID")
     @TableId(type = IdType.AUTO)
     private Long id;
     /**
@@ -52,15 +54,18 @@ public class SeckillActivity implements Serializable {
     @ApiModelProperty("活动状态：0-未开始 1-进行中 2-已结束")
     @TableField(value = "status")
     private Integer status;
+
     @ApiModelProperty("活动状态文本")
     @TableField(value = "status_text", exist = false)
     private String statusText;
+
     /**
      * 创建时间
      */
     @ApiModelProperty("创建时间")
     @TableField(value = "create_time")
     private Date createTime;
+
     /**
      * 更新时间
      */

@@ -3,6 +3,7 @@ package generator.domain.order;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class Order {
     private String orderNo; // 订单编号
     private Integer status; // 订单状态
     private String statusText; // 订单状态文本
-    private Date createTime; // 创建时间
+    private LocalDateTime createTime; // 创建时间
     private List<item> items; // 订单项
 }
 
