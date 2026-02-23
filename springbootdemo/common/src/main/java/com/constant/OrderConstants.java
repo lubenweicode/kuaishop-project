@@ -59,4 +59,14 @@ public class OrderConstants {
     public static final String MSG_ORDER_DELETE_SUCCESS = "订单删除成功";
     public static final String MSG_ONLY_PENDING_PAYMENT_CANCEL = "仅待付款订单可取消";
     public static final String MSG_ONLY_FINISHED_DELETABLE = "仅已完成或已取消的订单可删除";
+
+    /**
+     * 支付相关
+     */
+    public static final String MSG_PAY_NOTIFY_SUCCESS = "支付成功";
+    public static final String MSG_PAY_NOTIFY_FAILED = "支付失败";
+    public static final String MSG_PAY_TYPE_NOT_NULL = "支付方式不能为空";
+    public static final String MSG_PAY_TYPE_ERROR = "支付方式错误";
+    public static final String MSG_PAY_NOTIFY_ERROR = "支付回调异常";
+
 }

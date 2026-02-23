@@ -54,15 +54,39 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements Au
 
         // 1. 入参非空校验
         if (registerAuthDTO == null) {
-            return Result.error(AdminConstants.PARAM_ERROR, AdminConstants.PARAM_ERROR_MESSAGE);
+            return Result.error(AdminConstants.PARAM_ERROR, AdminConstants.MSG_PARAM_ERROR_MESSAGE);
         }
         // 1.1 用户名非空校验
         if (registerAuthDTO.getUsername() == null || registerAuthDTO.getUsername().trim().isEmpty()) {
-            return Result.error(AdminConstants.PARAM_ERROR, AdminConstants.PARAM_ERROR_USERNAME_NULL_MESSAGE);
+            return Result.error(AdminConstants.PARAM_ERROR, AdminConstants.MSG_PARAM_ERROR_USERNAME_NULL_MESSAGE);
         }
         // 1.2 密码非空校验
         if (registerAuthDTO.getPassword() == null || registerAuthDTO.getPassword().trim().isEmpty()) {
-            return Result.error(AdminConstants.PARAM_ERROR, AdminConstants.PARAM_ERROR_PASSWORD_NULL_MESSAGE);
+            return Result.error(AdminConstants.PARAM_ERROR, AdminConstants.MSG_PARAM_ERROR_PASSWORD_NULL_MESSAGE);
+        }
+
+        // 1.3 用户名格式正则验证
+        if (!registerAuthDTO.getUsername().matches(AdminConstants.USERNAME_REGEX)) {
+            return Result.error(AdminConstants.PARAM_ERROR, AdminConstants.MSG_USERNAME_FORMAT_ERROR_MESSAGE);
+        }
+
+        // 1.4 密码正则验证
+        if (!registerAuthDTO.getPassword().matches(AdminConstants.PASSWORD_REGEX)) {
+            return Result.error(AdminConstants.PARAM_ERROR, AdminConstants.MSG_PASSWORD_FORMAT_ERROR_MESSAGE);
+        }
+
+        // 1.5 电话正则验证
+        if (registerAuthDTO.getPhone() != null && !registerAuthDTO.getPhone().trim().isEmpty()) {
+            if (!registerAuthDTO.getPhone().matches(AdminConstants.PHONE_REGEX)) {
+                return Result.error(AdminConstants.PARAM_ERROR, AdminConstants.MSG_PHONE_FORMAT_ERROR_MESSAGE);
+            }
+        }
+
+        // 1.6 邮箱格式正则验证
+        if (registerAuthDTO.getEmail() != null && !registerAuthDTO.getEmail().trim().isEmpty()) {
+            if (!registerAuthDTO.getEmail().matches(AdminConstants.EMAIL_REGEX)) {
+                return Result.error(AdminConstants.PARAM_ERROR, AdminConstants.MSG_EMAIL_FORMAT_ERROR_MESSAGE);
+            }
         }
 
         // 2. 数据库查询,校验唯一字段【正确写法：无嵌套OR，先判断非空再加条件】
@@ -92,20 +116,20 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements Au
 
             // 校验用户名重复（优先，因为用户名是必填）
             if (registerAuthDTO.getUsername().equals(existUser.getUsername())) {
-                return Result.error(AdminConstants.USERNAME_EXIST, AdminConstants.USERNAME_EXIST_MESSAGE);
+                return Result.error(AdminConstants.USERNAME_EXIST, AdminConstants.MSG_USERNAME_EXIST_MESSAGE);
             }
 
             // 校验手机号重复（选填，传了才校验）
             if (StringUtils.hasText(reqPhone) && StringUtils.hasText(existUser.getPhone())) {
                 if (reqPhone.equals(existUser.getPhone())) {
-                    return Result.error(AdminConstants.PHONE_EXIST, AdminConstants.PHONE_EXIST_MESSAGE);
+                    return Result.error(AdminConstants.PHONE_EXIST, AdminConstants.MSG_PHONE_EXIST_MESSAGE);
                 }
             }
 
             // 校验邮箱重复（选填，传了才校验）
             if (StringUtils.hasText(reqEmail) && StringUtils.hasText(existUser.getEmail())) {
                 if (reqEmail.equals(existUser.getEmail())) {
-                    return Result.error(AdminConstants.EMAIL_EXIST, AdminConstants.EMAIL_EXIST_MESSAGE);
+                    return Result.error(AdminConstants.EMAIL_EXIST, AdminConstants.MSG_EMAIL_EXIST_MESSAGE);
                 }
             }
         }
@@ -126,7 +150,7 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements Au
             // 6. 保存用户
             boolean saveUser = this.save(user);
             if (!saveUser) {
-                return Result.error(AdminConstants.REGISTER_FAILED, AdminConstants.REGISTER_FAILED_MESSAGE);
+                return Result.error(AdminConstants.REGISTER_FAILED, AdminConstants.MSG_REGISTER_FAILED_MESSAGE);
             }
 
             // 7. 封装返回结果
@@ -137,9 +161,9 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements Au
         } catch (Exception e) {
             log.error("用户注册失败，用户名：{}，异常信息：", registerAuthDTO.getUsername(), e);
             if (e instanceof org.springframework.dao.DuplicateKeyException) {
-                return Result.error(AdminConstants.USERNAME_PHONE_EMAIL_EXIST, AdminConstants.USERNAME_PHONE_EMAIL_EXIST_MESSAGE);
+                return Result.error(AdminConstants.USERNAME_PHONE_EMAIL_EXIST, AdminConstants.MSG_USERNAME_PHONE_EMAIL_EXIST_MESSAGE);
             }
-            return Result.error(AdminConstants.REGISTER_FAILED, AdminConstants.REGISTER_FAILED_MESSAGE);
+            return Result.error(AdminConstants.REGISTER_FAILED, AdminConstants.MSG_REGISTER_FAILED_MESSAGE);
         }
     }
 
@@ -156,7 +180,7 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements Au
 
         // 1. 入参非空校验
         if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
-            return Result.error(AdminConstants.PARAM_ERROR, AdminConstants.PARAM_ERROR_MESSAGE);
+            return Result.error(AdminConstants.PARAM_ERROR, AdminConstants.MSG_PARAM_ERROR_MESSAGE);
         }
 
         // 2. 第一步：先查询用户名是否存在（仅查用户名，不查密码）
@@ -181,7 +205,7 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements Au
                 int remainMinutes = remainSeconds != null && remainSeconds > 0
                         ? (int) (remainSeconds / 60)
                         : 30;
-                String lockMsg = String.format(AdminConstants.LOGIN_LOCKED_TIP, remainMinutes);
+                String lockMsg = String.format(AdminConstants.MSG_LOGIN_LOCKED_TIP, remainMinutes);
                 return Result.error(403, lockMsg);
             }
         } catch (RedisConnectionFailureException e) {
@@ -213,13 +237,13 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements Au
                     // 达到最大失败次数,触发锁定
                     redisTemplate.opsForValue().set(lockKey, "1", AdminConstants.LOGIN_LOCK_DURATION, TimeUnit.SECONDS);
                     redisTemplate.delete(failCountKey);
-                    return Result.error(403, AdminConstants.LOGIN_LOCKED_MSG);
+                    return Result.error(403, AdminConstants.MSG_LOGIN_LOCKED_MSG);
                 } else {
-                    return Result.error(400, String.format("%s，剩余%d次尝试机会", AdminConstants.USER_PWD_ERROR_MSG, remainTimes));
+                    return Result.error(400, String.format("%s，剩余%d次尝试机会", AdminConstants.MSG_USER_PWD_ERROR_MSG, remainTimes));
                 }
             } catch (RedisConnectionFailureException e) {
                 log.error("Redis连接失败（登录失败次数累加）：{}", e.getMessage());
-                return Result.error(400, AdminConstants.USER_PWD_ERROR_MSG);
+                return Result.error(400, AdminConstants.MSG_USER_PWD_ERROR_MSG);
             }
         }
 

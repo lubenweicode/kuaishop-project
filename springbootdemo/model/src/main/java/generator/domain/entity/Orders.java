@@ -111,6 +111,38 @@ public class Orders {
     private String logisticsNo;
 
     /**
+     * 支付平台订单号
+     */
+    @ApiModelProperty("支付平台订单号")
+    @Length(max = 200, message = "编码长度不能超过200")
+    @TableField(value = "out_trade_no")
+    private String outTradeNo;
+
+    /**
+     * 支付方式：1-支付宝 2-微信 3-货到付款
+     */
+    @ApiModelProperty("支付方式：1-支付宝 2-微信 3-货到付款")
+    @Length(max = 1, message = "编码长度不能超过1")
+    @TableField(value = "pay_type")
+    private Integer payType;
+
+    /**
+     * 支付密钥
+     */
+    @ApiModelProperty("支付密钥")
+    @TableField(value = "pay_secret")
+    private String paySecret;
+
+    /**
+     * 支付时间
+     */
+    @ApiModelProperty("支付时间")
+    @Length(max = 19, message = "编码长度不能超过19")
+    @TableField(value = "pay_time")
+    private Date payTime;
+
+
+    /**
      * 下单时间
      */
     @ApiModelProperty("下单时间")
