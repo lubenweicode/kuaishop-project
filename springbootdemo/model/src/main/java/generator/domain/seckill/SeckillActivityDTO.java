@@ -2,7 +2,6 @@ package generator.domain.seckill;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 

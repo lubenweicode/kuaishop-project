@@ -12,7 +12,6 @@ import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * 收货地址表

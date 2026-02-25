@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static com.constant.CartConstants.CODE_PRODUCT_ID_INVALID;
-import static com.constant.CartConstants.MSG_PRODUCT_ID_INVALID;
 import static com.constant.ProductConstants.*;
 
 

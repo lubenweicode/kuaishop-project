@@ -1,6 +1,7 @@
 package com.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.constant.OrderConstants;
 import com.repository.mapper.OrderMapper;
 import com.service.PayMentService;
 import generator.domain.entity.Orders;
@@ -8,8 +9,6 @@ import generator.domain.payment.PayMentDTO;
 import generator.domain.response.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import com.constant.OrderConstants;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import java.util.*;

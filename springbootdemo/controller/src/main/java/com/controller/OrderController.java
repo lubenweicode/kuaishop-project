@@ -6,7 +6,6 @@ import generator.domain.order.OrderCreateDTO;
 import generator.domain.order.OrderPageVO;
 import generator.domain.order.OrderVO;
 import generator.domain.response.Result;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

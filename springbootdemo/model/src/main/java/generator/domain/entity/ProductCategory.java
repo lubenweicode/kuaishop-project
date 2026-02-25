@@ -7,13 +7,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * 商品分类表

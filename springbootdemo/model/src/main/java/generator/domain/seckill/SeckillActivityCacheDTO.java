@@ -5,7 +5,6 @@ import com.alibaba.fastjson.annotation.JSONType;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @JSONType(orders = {"id", "activityName", "status", "statusText", "startTime", "endTime"})
 @Data

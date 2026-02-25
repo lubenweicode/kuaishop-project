@@ -10,11 +10,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.cglib.core.Local;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * 用户表
