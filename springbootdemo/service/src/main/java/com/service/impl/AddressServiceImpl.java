@@ -13,39 +13,43 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.constant.AddressConstants.*;
+
 @Service
 public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> implements AddressService {
 
     @Override
     public Result<Object> addAddress(Long userId, AddressDTO addressDTO) {
-
+        // 1. 登录校验
         if (userId == null) {
-            return Result.error(401, "请先登录");
+            return Result.error(CODE_LOGIN_ERROR, MSG_LOGIN_ERROR);
+        }
+        // 2. 参数校验
+        // 2.1 收货人名称
+        if (addressDTO.getReceiverName() == null){
+            return Result.error(CODE_RECEIVER_NAME_REQUIRED, MSG_RECEIVER_NAME_REQUIRED);
+        }
+        // 2.2 收货人手机号
+        if (addressDTO.getReceiverPhone() == null){
+            return Result.error(CODE_RECEIVER_PHONE_REQUIRED, MSG_RECEIVER_PHONE_REQUIRED);
+        }
+        // 2.3 省份
+        if (addressDTO.getProvince() == null){
+            return Result.error(CODE_PROVINCE_REQUIRED, MSG_PROVINCE_REQUIRED);
+        }
+        // 2.4 城市
+        if (addressDTO.getCity() == null){
+            return Result.error(CODE_CITY_REQUIRED, MSG_CITY_REQUIRED);
+        }
+        // 2.5 区县
+        if (addressDTO.getDistrict() == null){
+            return Result.error(CODE_DISTRICT_REQUIRED, MSG_DISTRICT_REQUIRED);
+        }
+        // 2.6 详细地址
+        if (addressDTO.getDetailAddress() == null){
+            return Result.error(CODE_DETAIL_ADDRESS_REQUIRED, MSG_DETAIL_ADDRESS_REQUIRED);
         }
 
-        if (addressDTO.getReceiverName() == null) {
-            return Result.error(400, "收货人不能为空");
-        }
-
-        if (addressDTO.getReceiverPhone() == null) {
-            return Result.error(400, "收货电话不能为空");
-        }
-
-        if (addressDTO.getProvince() == null) {
-            return Result.error(400, "省份不能为空");
-        }
-
-        if (addressDTO.getCity() == null) {
-            return Result.error(400, "城市不能为空");
-        }
-
-        if (addressDTO.getDistrict() == null) {
-            return Result.error(400, "区县不能为空");
-        }
-
-        if (addressDTO.getDetailAddress() == null) {
-            return Result.error(400, "详细地址不能为空");
-        }
 
         Address address = new Address();
         BeanUtils.copyProperties(addressDTO, address);
@@ -54,9 +58,9 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
         boolean result = this.save(address);
 
         if (!result) {
-            return Result.error(500, "添加地址失败");
+            return Result.error(CODE_ADD_ADDRESS_FAIL, MSG_ADD_ADDRESS_FAIL);
         } else {
-            return Result.success(addressDTO);
+            return Result.success(CODE_ADD_ADDRESS_SUCCESS,MSG_ADD_ADDRESS_SUCCESS,addressDTO);
         }
     }
 
@@ -68,18 +72,24 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
      */
     @Override
     public Result<Object> list(Long userId) {
-        if (userId == null) {
-            return Result.error(401, "请先登录");
-        }
+        try {
+            if (userId == null) {
+                return Result.error(CODE_LOGIN_ERROR,  MSG_LOGIN_ERROR);
+            }
 
-        List<Address> list;
+            List<Address> list;
 
-        list = this.list(new QueryWrapper<Address>().eq("user_id", userId));
+            list = this.list(new QueryWrapper<Address>().eq("user_id", userId));
 
-        if (list.isEmpty()) {
-            return Result.success(list);
-        } else {
-            return Result.success(list);
+            if (list.isEmpty()){
+                return Result.success(CODE_LIST_ADDRESS_EMPTY, MSG_LIST_ADDRESS_EMPTY);
+            }else {
+                return Result.success(CODE_LIST_ADDRESS_SUCCESS, MSG_LIST_ADDRESS_SUCCESS, list);
+            }
+        } catch (Exception e) {
+            //
+            log.error("获取用户地址列表失败:{}");
+            return Result.error(CODE_LIST_ADDRESS_FAIL, MSG_LIST_ADDRESS_FAIL);
         }
     }
 
@@ -94,20 +104,20 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
     public Result<Object> setDefault(Long userId, Long id) {
 
         if (userId == null) {
-            return Result.error(401, "请先登录");
+            return Result.error(CODE_LOGIN_ERROR, MSG_LOGIN_ERROR);
         }
 
         if (id == null) {
-            return Result.error(400, "地址ID不能为空");
+            return Result.error(CODE_ADDRESS_ID_REQUIRED, MSG_ADDRESS_ID_REQUIRED);
         }
 
         Address address = this.getById(id);
         if (address == null) {
-            return Result.error(400, "地址不存在");
+            return Result.error(CODE_ADDRESS_NOT_FOUND, MSG_ADDRESS_NOT_FOUND);
         }
 
         if (!address.getUserId().equals(userId)) {
-            return Result.error(400, "地址不属于当前用户");
+            return Result.error(CODE_ADDRESS_NOT_BELONG_TO_USER, MSG_ADDRESS_NOT_BELONG_TO_USER );
         }
 
         // 查询当前用户默认地址
@@ -129,10 +139,12 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
         newDefaultAddress.setIsDefault(1);
         boolean update = this.update(newDefaultAddress, newQueryWrapper);
 
+
+        //
         if (!update) {
-            return Result.error(500, "设置默认地址失败");
+            return Result.error(CODE_SET_DEFAULT_ADDRESS_FAIL, MSG_SET_DEFAULT_ADDRESS_FAIL);
         } else {
-            return Result.success();
+            return Result.success(CODE_SET_DEFAULT_ADDRESS_SUCCESS, MSG_SET_DEFAULT_ADDRESS_SUCCESS);
         }
     }
 }

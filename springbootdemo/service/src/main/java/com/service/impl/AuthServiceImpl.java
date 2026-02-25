@@ -67,25 +67,25 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, User> implements Au
 
         // 1.3 用户名格式正则验证
         if (!registerAuthDTO.getUsername().matches(AdminConstants.USERNAME_REGEX)) {
-            return Result.error(AdminConstants.PARAM_ERROR, AdminConstants.MSG_USERNAME_FORMAT_ERROR_MESSAGE);
+            return Result.error(AdminConstants.USERNAME_FORMAT_ERROR, AdminConstants.MSG_USERNAME_FORMAT_ERROR_MESSAGE);
         }
 
         // 1.4 密码正则验证
         if (!registerAuthDTO.getPassword().matches(AdminConstants.PASSWORD_REGEX)) {
-            return Result.error(AdminConstants.PARAM_ERROR, AdminConstants.MSG_PASSWORD_FORMAT_ERROR_MESSAGE);
+            return Result.error(AdminConstants.PASSWORD_FORMAT_ERROR, AdminConstants.MSG_PASSWORD_FORMAT_ERROR_MESSAGE);
         }
 
         // 1.5 电话正则验证
         if (registerAuthDTO.getPhone() != null && !registerAuthDTO.getPhone().trim().isEmpty()) {
             if (!registerAuthDTO.getPhone().matches(AdminConstants.PHONE_REGEX)) {
-                return Result.error(AdminConstants.PARAM_ERROR, AdminConstants.MSG_PHONE_FORMAT_ERROR_MESSAGE);
+                return Result.error(AdminConstants.PHONE_FORMAT_ERROR, AdminConstants.MSG_PHONE_FORMAT_ERROR_MESSAGE);
             }
         }
 
         // 1.6 邮箱格式正则验证
         if (registerAuthDTO.getEmail() != null && !registerAuthDTO.getEmail().trim().isEmpty()) {
             if (!registerAuthDTO.getEmail().matches(AdminConstants.EMAIL_REGEX)) {
-                return Result.error(AdminConstants.PARAM_ERROR, AdminConstants.MSG_EMAIL_FORMAT_ERROR_MESSAGE);
+                return Result.error(AdminConstants.EMAIL_FORMAT_ERROR, AdminConstants.MSG_EMAIL_FORMAT_ERROR_MESSAGE);
             }
         }
 
