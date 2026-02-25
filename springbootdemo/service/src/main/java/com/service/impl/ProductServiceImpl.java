@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static com.constant.CartConstants.CODE_PRODUCT_ID_INVALID;
+import static com.constant.CartConstants.MSG_PRODUCT_ID_INVALID;
 import static com.constant.ProductConstants.*;
 
 
@@ -222,11 +224,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Override
     public Result<Product> getProductById(Long id) throws JsonProcessingException {
         if (id == null) {
-            return Result.error(400, "商品ID不能为空");
+            return Result.error(CODE_PRODUCT_ID_NOT_NULL, MSG_PRODUCT_ID_NOT_NULL);
         }
         long productId = id;
         if (productId <= 0) {
-            return Result.error(400, "商品ID必须大于0");
+            return Result.error(CODE_PRODUCT_ID_GT_0, MSG_PRODUCT_ID_GT_0);
         }
 
         String cacheKey = PRODUCT_CACHE_KEY_PREFIX + productId;
@@ -242,7 +244,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         Product productVO = this.getOne(queryWrapper);
         if (productVO == null) {
             log.warn("商品ID{}不存在", productId);
-            return Result.error(400, "商品不存在");
+            return Result.error(CODE_PRODUCT_NOT_EXIST, MSG_PRODUCT_NOT_EXIST);
         }
         redisTemplate.opsForValue().set(cacheKey, objectMapper.writeValueAsString(productVO), CACHE_PRODUCT_ID_EXPIRE_TIME, TimeUnit.MINUTES);
         log.info("Redis缓存写入成功，缓存键：{}，过期时间：{}分钟", cacheKey, CACHE_PRODUCT_ID_EXPIRE_TIME);
