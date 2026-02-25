@@ -1,6 +1,7 @@
 package com.interceptor;
 
 import com.alibaba.fastjson.JSONObject;
+import com.utils.IpUtil;
 import com.utils.JwtUtil;
 import generator.domain.context.UserContext;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ public class JwtInterceptor implements HandlerInterceptor {
     private static final String REDIS_JWT_KEY_PREFIX = "jwt:%d:access";
     private final JwtUtil jwtUtil;
     private final StringRedisTemplate redisTemplate;
+    private static final String REQUEST_START_TIME = "requestStartTime";
     // 读取JWT拦截器开关配置
     @Value("${jwt.interceptor.enable:true}")
     private boolean jwtInterceptorEnable;
@@ -40,7 +42,15 @@ public class JwtInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+        String clientIp = IpUtil.getClientIp(request);
         String requestURI = request.getRequestURI();
+        String requestMethod = request.getMethod();
+        // 记录请求开始时间(计算耗时)
+        long startTime = System.currentTimeMillis();
+        request.setAttribute(REQUEST_START_TIME, startTime);
+
+        // 基础请求日志
+        log.info("【请求基础信息】IP：{} | 路径：{} | 方法：{}", clientIp, requestURI, requestMethod);
 
         if (!jwtInterceptorEnable) {
             log.info("JWT拦截器已禁用，所有请求都允许通过");
@@ -116,6 +126,25 @@ public class JwtInterceptor implements HandlerInterceptor {
             log.error("请求URI：{} 携带的Token验证异常：{}", requestURI, e.getMessage(), e);
             return unauthorizedResponse(response, "JWT令牌验证异常");
         }
+    }
+
+    /**
+     * 新增：请求处理完成后记录响应耗时和状态码（补充IP日志维度）
+     */
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, org.springframework.web.servlet.ModelAndView modelAndView) throws Exception {
+        // 获取请求开始时间、IP、路径
+        Long startTime = (Long) request.getAttribute(REQUEST_START_TIME);
+        if (startTime == null) return;
+
+        long costTime = System.currentTimeMillis() - startTime;
+        String clientIp = IpUtil.getClientIp(request);
+        String requestURI = request.getRequestURI();
+        int statusCode = response.getStatus();
+
+        // 响应日志：IP + 路径 + 状态码 + 耗时
+        log.info("【请求响应信息】IP：{} | 路径：{} | 状态码：{} | 耗时：{}ms",
+                clientIp, requestURI, statusCode, costTime);
     }
 
     /**
