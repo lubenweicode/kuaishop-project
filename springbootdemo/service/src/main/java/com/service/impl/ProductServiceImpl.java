@@ -22,16 +22,13 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static com.constant.ProductConstants.*;
+
+
 @Service
 @Slf4j
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements ProductService {
 
-    private static final String PRODUCT_CACHE_PREFIX = "product:list:";
-    private static final String PRODUCT_CACHE_KEY_PREFIX = "product:info:";
-    private static final String PRODUCT_CACHE_VALUE_PREFIX = "product:category:";
-    private static final long CACHE_PRODUCT_LIST_EXPIRE_TIME = 10;
-    private static final long CACHE_PRODUCT_ID_EXPIRE_TIME = 5;
-    private static final long CACHE_PRODUCT_CATEGORY_EXPIRE_TIME = 10;
 
     private final ProductMapper productMapper;
     private final StringRedisTemplate redisTemplate;
