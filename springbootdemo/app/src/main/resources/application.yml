@@ -5,8 +5,8 @@ spring:
   # 数据源配置
   datasource:
     url: jdbc:mysql://localhost:3306/quickshop?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: root
-    password: root123456
+    username: ${DB_USERNAME}  # 默认值为root
+    password: ${DB_PASSWORD}       # 必须从环境变量读取
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   # JPA配置（如果不用JPA可删除）
@@ -38,6 +38,12 @@ spring:
           min-idle: 0
           max-wait: -1ms
 
+  # 完全禁用 JMX
+  jmx:
+    enabled: false
+
+    
+
 # Redisson 完整单节点配置（无密码情况）
 redisson:
   singleServerConfig:
@@ -55,6 +61,7 @@ redisson:
 # 服务器配置
 server:
   port: 8080
+  address: 0.0.0.0  # 允许所有IP访问，而非仅本地
   servlet:
     context-path: /api/v1
 
