@@ -23,6 +23,8 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.constant.OrderConstants.*;
+
 @Service
 @Slf4j
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implements OrderService {
@@ -49,18 +51,18 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
     public Result<OrderVO> createOrder(Long userId, OrderCreateDTO orderCreateDTO) {
 
         if (userId == null) {
-            return Result.error(500, OrderConstants.MSG_LOGIN_REQUIRED);
+            return Result.error(ERROR_CODE_LOGIN_REQUIRED, OrderConstants.MSG_LOGIN_REQUIRED);
         }
 
         // 1. 参数基础校验
         List<Long> productIds = orderCreateDTO.getCartItemIds();
         if (productIds == null || productIds.isEmpty()) {
-            return Result.error(500, OrderConstants.MSG_SELECT_PRODUCT);
+            return Result.error(ERROR_CODE_SELECT_PRODUCT, OrderConstants.MSG_SELECT_PRODUCT);
         }
 
         List<OrderItem> items = orderCreateDTO.getItems();
         if (items == null || items.isEmpty()) {
-            return Result.error(500, OrderConstants.MSG_SELECT_PRODUCT);
+            return Result.error(ERROR_CODE_SELECT_PRODUCT, OrderConstants.MSG_SELECT_PRODUCT);
         }
 
         // 2. 构建分布式锁Key(粒度:用户ID+商品ID组合,防止同一用户并发下单同一商品)
@@ -77,7 +79,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
             // 3. 获取分布式锁(最多重试5秒,锁超时30秒)
             lockValue = orderDistributedLock.tryLock(lockKey, 30000, 5000, 5);
             if (lockValue == null) {
-                return Result.error(500, OrderConstants.MSG_DUPLICATE_ORDER);
+                return Result.error(ERROR_CODE_DUPLICATE_ORDER, MSG_DUPLICATE_ORDER);
             }
 
             // 4. 批量查询商品
@@ -85,7 +87,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
             queryWrapper.in(Product::getId, productIds);
             List<Product> products = productMapper.selectList(queryWrapper);
             if (products == null || products.isEmpty()) {
-                return Result.error(500, OrderConstants.MSG_PRODUCT_NOT_EXIST);
+                return Result.error(ERROR_CODE_PRODUCT_NOT_EXIST, MSG_PRODUCT_NOT_EXIST);
             }
 
             // 转为Map,方便快速查询
@@ -105,20 +107,20 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
                 // 商品不存在校验
                 if (productId == null || quantity == null || quantity <= 0) {
                     rollbackStock(stockDeductMap);
-                    return Result.error(500, "商品数量必须大于0");
+                    return Result.error(ERROR_CODE_PRODUCT_QUANTITY_INVALID, MSG_PRODUCT_QUANTITY_INVALID);
                 }
 
                 Product product = productMap.get(productId);
                 if (product == null) {
                     rollbackStock(stockDeductMap);
-                    return Result.error(500, String.format("商品ID: %s %s", productId, OrderConstants.MSG_PRODUCT_NOT_EXIST));
+                    return Result.error(ERROR_CODE_PRODUCT_NOT_EXIST, String.format("商品ID: %s %s", productId, MSG_PRODUCT_NOT_EXIST ));
                 }
 
                 // 库存校验
                 if (product.getStock() < quantity) {
                     rollbackStock(stockDeductMap);
-                    return Result.error(500, String.format("商品: %s %s,当前库存:%s",
-                            product.getName(), OrderConstants.MSG_STOCK_INSUFFICIENT, product.getStock()));
+                    return Result.error(ERROR_CODE_STOCK_INSUFFICIENT, String.format("商品: %s %s,当前库存:%s",
+                            product.getName(), MSG_STOCK_INSUFFICIENT , product.getStock()));
                 }
 
                 // 计算金额
@@ -129,7 +131,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
                 Integer updateCount = productMapper.updateStock(productId, quantity);
                 if (updateCount == null || updateCount <= 0) {
                     rollbackStock(stockDeductMap);
-                    return Result.error(500, String.format("商品: %s %s", product.getName(), OrderConstants.MSG_STOCK_DEDUCT_FAILED));
+                    return Result.error(ERROR_CODE_STOCK_DEDUCT_FAILED, String.format("商品: %s %s", product.getName(), OrderConstants.MSG_STOCK_DEDUCT_FAILED));
                 }
             }
 
@@ -164,7 +166,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
             int insertCount = orderMapper.insert(order);
             if (insertCount <= 0) {
                 rollbackStock(stockDeductMap);
-                return Result.error(500, OrderConstants.MSG_ORDER_CREATE_FAILED);
+                return Result.error(ERROR_CODE_ORDER_CREATE_FAILED , OrderConstants.MSG_ORDER_CREATE_FAILED);
             }
 
             // 9. 构建订单VO
@@ -176,7 +178,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
         } catch (Exception e) {
             // 捕获所有异常,保证事务回滚
             log.error("创建订单异常,用户ID: {},异常信息: {}", userId, e); // 错误日志
-            return Result.error(500,  OrderConstants.MSG_ORDER_CREATE_EXCEPTION);
+            return Result.error(ERROR_CODE_ORDER_CREATE_EXCEPTION,MSG_ORDER_CREATE_EXCEPTION);
         } finally {
             // 10. 释放分布式锁
             if (lockValue != null) {
@@ -216,15 +218,15 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
     public Result<OrderPageVO> getOrderList(Long userId, Integer pageNum, Integer pageSize, Integer status) {
         // 1. 校验入参
         if (userId == null) {
-            return Result.error(400, OrderConstants.MSG_USER_ID_REQUIRED);
+            return Result.error(ERROR_CODE_USER_ID_REQUIRED, OrderConstants.MSG_USER_ID_REQUIRED);
         }
 
         if (pageNum == null || pageNum <= 0) {
-            return Result.error(400, OrderConstants.MSG_PAGE_NUM_INVALID);
+            return Result.error(ERROR_CODE_PAGE_NUM_INVALID, OrderConstants.MSG_PAGE_NUM_INVALID);
         }
 
         if (pageSize == null || pageSize <= 0) {
-            return Result.error(400, OrderConstants.MSG_PAGE_SIZE_INVALID);
+            return Result.error(ERROR_CODE_PAGE_SIZE_INVALID , OrderConstants.MSG_PAGE_SIZE_INVALID);
         }
 
         Page<Orders> page = new Page<>(pageNum, pageSize);
@@ -297,13 +299,13 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
     public Result<OrderVO> getOrder(Long userId, String orderNo) {
 
         if (userId == null) {
-            log.warn("用户ID不能为空");
-            return Result.error(400, OrderConstants.MSG_USER_ID_REQUIRED);
+            log.warn("用户ID:{}不能为空", userId);
+            return Result.error(ERROR_CODE_USER_ID_REQUIRED, OrderConstants.MSG_USER_ID_REQUIRED);
         }
 
         if (orderNo == null) {
-            log.warn("订单号不能为空");
-            return Result.error(400, OrderConstants.MSG_ORDER_NO_REQUIRED);
+            log.warn("用户ID:{},订单号不能为空", userId);
+            return Result.error(ERROR_CODE_ORDER_NO_REQUIRED, OrderConstants.MSG_ORDER_NO_REQUIRED);
         }
 
         LambdaQueryWrapper<Orders> queryWrapper = new LambdaQueryWrapper<>();
@@ -311,8 +313,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
         queryWrapper.eq(Orders::getOrderNo, orderNo);
         Orders order = orderMapper.selectOne(queryWrapper);
         if (order == null) {
-            log.warn("订单不存在");
-            return Result.error(404, OrderConstants.MSG_ORDER_NOT_EXIST);
+            log.warn("订单:{}不存在", orderNo);
+            return Result.error(ERROR_CODE_ORDER_NOT_EXIST, OrderConstants.MSG_ORDER_NOT_EXIST);
         }
 
         OrderVO orderVO = new OrderVO();
@@ -354,12 +356,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
 
         if (userId == null) {
             log.warn(OrderConstants.MSG_USER_ID_REQUIRED);
-            return Result.error(400, OrderConstants.MSG_USER_ID_REQUIRED);
+            return Result.error(ERROR_CODE_USER_ID_REQUIRED, OrderConstants.MSG_USER_ID_REQUIRED);
         }
 
         if (!StringUtils.hasText(orderNo)) {
             log.warn(OrderConstants.MSG_ORDER_NO_REQUIRED);
-            return Result.error(400, OrderConstants.MSG_ORDER_NO_REQUIRED);
+            return Result.error(ERROR_CODE_ORDER_NO_REQUIRED, OrderConstants.MSG_ORDER_NO_REQUIRED);
         }
 
         LambdaQueryWrapper<Orders> queryWrapper = new LambdaQueryWrapper<>();
@@ -368,13 +370,13 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
         Orders order = orderMapper.selectOne(queryWrapper);
         if (order == null) {
             log.warn("订单{}不存在,用户ID:{}", orderNo, userId);
-            return Result.error(404, OrderConstants.MSG_ORDER_NOT_EXIST);
+            return Result.error(ERROR_CODE_ORDER_NOT_EXIST, OrderConstants.MSG_ORDER_NOT_EXIST);
         }
 
         if (!Objects.equals(order.getOrderStatus(), OrderConstants.ORDER_STATUS_PENDING_PAYMENT)) {
             log.warn("订单{}状态错误,当前状态:{},仅待付款订单可取消",
                     order.getOrderNo(), order.getOrderStatus());
-            return Result.error(400, OrderConstants.MSG_ONLY_PENDING_PAYMENT_CANCEL);
+            return Result.error(ERROR_CODE_ONLY_PENDING_PAYMENT_CANCEL, OrderConstants.MSG_ONLY_PENDING_PAYMENT_CANCEL);
         }
 
         // 4. 回滚库存
@@ -397,10 +399,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
         int update = orderMapper.updateById(order);
         if (update == 0) {
             log.warn("订单{}取消失败", order.getOrderNo());
-            return Result.error(500, OrderConstants.MSG_ORDER_CANCEL_FAILED);
+            return Result.error(ERROR_CODE_ORDER_CANCEL_FAILED, OrderConstants.MSG_ORDER_CANCEL_FAILED);
         }
 
-        return Result.success(OrderConstants.MSG_ORDER_CANCEL_SUCCESS);
+        return Result.success(SUCCESS_CODE_ORDER_CANCEL,SUCCESS_MSG_ORDER_CANCEL);
     }
 
     /**
@@ -414,12 +416,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
 
         if (userId == null) {
             log.warn(OrderConstants.MSG_USER_ID_REQUIRED);
-            return Result.error(400, OrderConstants.MSG_USER_ID_REQUIRED);
+            return Result.error(ERROR_CODE_USER_ID_REQUIRED, OrderConstants.MSG_USER_ID_REQUIRED);
         }
 
         if (!StringUtils.hasText(orderNo)) {
             log.warn(OrderConstants.MSG_ORDER_NO_REQUIRED);
-            return Result.error(400, OrderConstants.MSG_ORDER_NO_REQUIRED);
+            return Result.error(ERROR_CODE_ORDER_NO_REQUIRED, OrderConstants.MSG_ORDER_NO_REQUIRED);
         }
 
         // 仅允许删除已完成或已取消的订单
@@ -430,7 +432,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
 
         if (order == null) {
             log.warn("订单{}不存在,用户ID:{}", orderNo, userId);
-            return Result.error(404, OrderConstants.MSG_ORDER_NOT_EXIST);
+            return Result.error(ERROR_CODE_ORDER_NOT_EXIST, OrderConstants.MSG_ORDER_NOT_EXIST);
         }
 
         // 3. 状态校验（仅已完成/已取消可删除）
@@ -438,15 +440,15 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
                 && !Objects.equals(order.getOrderStatus(), OrderConstants.ORDER_STATUS_CANCELLED)) {
             log.warn("订单{}状态错误,当前状态:{},仅已完成或已取消的订单可删除",
                     order.getOrderNo(), order.getOrderStatus());
-            return Result.error(400, OrderConstants.MSG_ONLY_FINISHED_DELETABLE);
+            return Result.error(ERROR_CODE_ONLY_FINISHED_DELETABLE, OrderConstants.MSG_ONLY_FINISHED_DELETABLE);
         }
 
         // 4. 删除订单
         int delete = orderMapper.delete(queryWrapper);
         if (delete == 0) {
             log.warn("订单{}删除失败", order.getOrderNo());
-            return Result.error(500, OrderConstants.MSG_ORDER_DELETE_FAILED);
+            return Result.error(ERROR_CODE_ORDER_DELETE_FAILED, OrderConstants.MSG_ORDER_DELETE_FAILED);
         }
-        return Result.success(OrderConstants.MSG_ORDER_DELETE_SUCCESS);
+        return Result.success(SUCCESS_CODE_ORDER_DELETE,SUCCESS_MSG_ORDER_DELETE);
     }
 }
