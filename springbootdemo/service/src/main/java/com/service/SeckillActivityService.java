@@ -1,11 +1,11 @@
 package com.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import generator.domain.entity.SeckillActivity;
-import generator.domain.order.OrderVO;
-import generator.domain.response.Result;
-import generator.domain.seckill.SeckillActivityVO;
-import generator.domain.seckill.SeckillOrderAddDTO;
+import domain.entity.SeckillActivity;
+import domain.order.OrderVO;
+import domain.response.Result;
+import domain.seckill.SeckillActivityVO;
+import domain.seckill.SeckillOrderAddDTO;
 
 import java.util.List;
 

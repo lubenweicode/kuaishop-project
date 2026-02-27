@@ -1,11 +1,11 @@
 package com.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import generator.domain.entity.Orders;
-import generator.domain.order.OrderCreateDTO;
-import generator.domain.order.OrderPageVO;
-import generator.domain.order.OrderVO;
-import generator.domain.response.Result;
+import domain.entity.Orders;
+import domain.order.OrderCreateDTO;
+import domain.order.OrderPageVO;
+import domain.order.OrderVO;
+import domain.response.Result;
 
 public interface OrderService extends IService<Orders> {
 

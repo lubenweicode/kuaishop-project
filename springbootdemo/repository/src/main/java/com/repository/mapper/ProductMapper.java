@@ -1,9 +1,9 @@
 package com.repository.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import generator.domain.entity.Product;
-import generator.domain.entity.ProductCategory;
-import generator.domain.product.ProductPageDTO;
+import domain.entity.Product;
+import domain.entity.ProductCategory;
+import domain.product.ProductPageDTO;
 import jakarta.validation.constraints.NotNull;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;

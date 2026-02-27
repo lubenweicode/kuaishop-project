@@ -2,11 +2,11 @@ package com.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import generator.domain.entity.Product;
-import generator.domain.entity.ProductCategory;
-import generator.domain.product.ProductListVO;
-import generator.domain.product.ProductPageDTO;
-import generator.domain.response.Result;
+import domain.entity.Product;
+import domain.entity.ProductCategory;
+import domain.product.ProductListVO;
+import domain.product.ProductPageDTO;
+import domain.response.Result;
 
 import java.util.List;
 

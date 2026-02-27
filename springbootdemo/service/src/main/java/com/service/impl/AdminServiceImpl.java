@@ -10,19 +10,20 @@ import com.repository.mapper.SeckillActivityMapper;
 import com.repository.mapper.SeckillProductMapper;
 import com.service.AdminService;
 import com.utils.DateUtil;
-import generator.domain.entity.Orders;
-import generator.domain.entity.Product;
-import generator.domain.entity.SeckillActivity;
-import generator.domain.entity.User;
-import generator.domain.order.OrderPageVO;
-import generator.domain.order.OrderVO;
-import generator.domain.product.ProductDTO;
-import generator.domain.product.ProductVO;
-import generator.domain.response.Result;
-import generator.domain.seckill.SeckillActivityDTO;
-import generator.domain.seckill.SeckillProductDTO;
-import generator.domain.seckill.SeckillProductVO;
-import generator.domain.statistics.Statistics;
+import domain.entity.SeckillProduct;
+import domain.entity.Orders;
+import domain.entity.Product;
+import domain.entity.SeckillActivity;
+import domain.entity.User;
+import domain.order.OrderPageVO;
+import domain.order.OrderVO;
+import domain.product.ProductDTO;
+import domain.product.ProductVO;
+import domain.response.Result;
+import domain.seckill.SeckillActivityDTO;
+import domain.seckill.SeckillProductDTO;
+import domain.seckill.SeckillProductVO;
+import domain.statistics.Statistics;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -453,7 +454,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, User> implements 
             }
 
             // 6. 处理秒杀商品列表
-            List<generator.domain.entity.SeckillProduct> seckillProductList = new ArrayList<>();
+            List<SeckillProduct> seckillProductList = new ArrayList<>();
             if (seckillActivityDTO.getProducts() != null && !seckillActivityDTO.getProducts().isEmpty()) {
 
                 for (SeckillProductDTO seckillProductDTO : seckillActivityDTO.getProducts()) {

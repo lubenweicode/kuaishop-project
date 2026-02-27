@@ -1,7 +1,7 @@
 package com.controller;
 
 import com.utils.UserRateLimiter;
-import generator.domain.response.Result;
+import domain.response.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

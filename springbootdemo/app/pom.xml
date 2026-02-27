@@ -59,8 +59,16 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
-                    <mainClass>XLin.com.app.SpringBootDemoApplication</mainClass>
+                    <!-- 替换成你实际的启动类全路径！！！ -->
+                    <mainClass>com.app.SpringBootDemoApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>

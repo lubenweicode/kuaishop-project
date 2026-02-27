@@ -2,10 +2,10 @@ package com.controller;
 
 import com.service.AuthService;
 import com.utils.IpUtil;
-import generator.domain.auth.LoginAuthDTO;
-import generator.domain.auth.RegisterAuthDTO;
-import generator.domain.auth.UserInfoVO;
-import generator.domain.response.Result;
+import domain.auth.LoginAuthDTO;
+import domain.auth.RegisterAuthDTO;
+import domain.auth.UserInfoVO;
+import domain.response.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;

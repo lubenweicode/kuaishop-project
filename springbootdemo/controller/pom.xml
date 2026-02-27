@@ -11,7 +11,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <!-- 新controller模块的唯一标识 -->
+    <!-- controller模块的唯一标识 -->
     <artifactId>controller</artifactId>
 
     <properties>
@@ -68,19 +68,5 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <!-- Spring Boot Maven插件：禁用repackage（子模块无需打成可执行jar） -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>repackage</id>
-                        <phase>none</phase>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+
 </project>

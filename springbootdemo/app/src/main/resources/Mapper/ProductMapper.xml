@@ -3,7 +3,7 @@
 <mapper namespace="com.repository.mapper.ProductMapper">
 
     <!-- 通用查询结果映射 -->
-    <resultMap id="ProductResultMap" type="generator.domain.entity.Product">
+    <resultMap id="ProductResultMap" type="domain.entity.Product">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="price" property="price"/>
@@ -16,7 +16,7 @@
 
 
     <!-- 动态条件查询商品列表 -->
-    <select id="selectByCondition" parameterType="generator.domain.product.ProductDTO" resultMap="ProductResultMap">
+    <select id="selectByCondition" parameterType="domain.product.ProductDTO" resultMap="ProductResultMap">
         SELECT
         id, name, price, sales, category_id, create_time, update_time
         FROM

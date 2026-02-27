@@ -2,11 +2,11 @@ package com.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.service.ProductService;
-import generator.domain.entity.Product;
-import generator.domain.entity.ProductCategory;
-import generator.domain.product.ProductListVO;
-import generator.domain.product.ProductPageDTO;
-import generator.domain.response.Result;
+import domain.entity.Product;
+import domain.entity.ProductCategory;
+import domain.product.ProductListVO;
+import domain.product.ProductPageDTO;
+import domain.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

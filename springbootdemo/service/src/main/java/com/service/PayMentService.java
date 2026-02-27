@@ -1,7 +1,7 @@
 package com.service;
 
-import generator.domain.payment.PayMentDTO;
-import generator.domain.response.Result;
+import domain.payment.PayMentDTO;
+import domain.response.Result;
 
 public interface PayMentService {
     Result pay(PayMentDTO payMentDTO);

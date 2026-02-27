@@ -1,14 +1,14 @@
 package com.controller;
 
 import com.service.AdminService;
-import generator.domain.context.UserContext;
-import generator.domain.entity.SeckillActivity;
-import generator.domain.order.OrderPageVO;
-import generator.domain.product.ProductDTO;
-import generator.domain.product.ProductVO;
-import generator.domain.response.Result;
-import generator.domain.seckill.SeckillActivityDTO;
-import generator.domain.statistics.Statistics;
+import domain.context.UserContext;
+import domain.entity.SeckillActivity;
+import domain.order.OrderPageVO;
+import domain.product.ProductDTO;
+import domain.product.ProductVO;
+import domain.response.Result;
+import domain.seckill.SeckillActivityDTO;
+import domain.statistics.Statistics;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

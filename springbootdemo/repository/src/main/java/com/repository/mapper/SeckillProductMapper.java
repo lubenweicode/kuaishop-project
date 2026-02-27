@@ -1,7 +1,7 @@
 package com.repository.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import generator.domain.entity.SeckillProduct;
+import domain.entity.SeckillProduct;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

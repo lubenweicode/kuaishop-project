@@ -1,7 +1,7 @@
 package com.interceptor;
 
 
-import generator.domain.response.Result;
+import domain.response.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.http.HttpStatus;

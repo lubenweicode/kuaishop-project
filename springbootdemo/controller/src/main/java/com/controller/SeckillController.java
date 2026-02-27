@@ -1,11 +1,11 @@
 package com.controller;
 
 import com.service.SeckillActivityService;
-import generator.domain.context.UserContext;
-import generator.domain.order.OrderVO;
-import generator.domain.response.Result;
-import generator.domain.seckill.SeckillActivityVO;
-import generator.domain.seckill.SeckillOrderAddDTO;
+import domain.context.UserContext;
+import domain.order.OrderVO;
+import domain.response.Result;
+import domain.seckill.SeckillActivityVO;
+import domain.seckill.SeckillOrderAddDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

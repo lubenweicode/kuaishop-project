@@ -3,10 +3,10 @@ package com.controller;
 import com.service.CartService;
 import com.utils.JwtUtil;
 import com.utils.UserRateLimiter;
-import generator.domain.cart.CartAddItem;
-import generator.domain.cart.CartItemVO;
-import generator.domain.context.UserContext;
-import generator.domain.response.Result;
+import domain.cart.CartAddItem;
+import domain.cart.CartItemVO;
+import domain.context.UserContext;
+import domain.response.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 

@@ -3,9 +3,9 @@ package com.repository.mapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import generator.domain.entity.Product;
-import generator.domain.entity.User;
-import generator.domain.order.Order;
+import domain.entity.Product;
+import domain.entity.User;
+import domain.order.Order;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 

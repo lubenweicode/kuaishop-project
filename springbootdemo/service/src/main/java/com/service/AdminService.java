@@ -1,14 +1,14 @@
 package com.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import generator.domain.entity.SeckillActivity;
-import generator.domain.entity.User;
-import generator.domain.order.OrderPageVO;
-import generator.domain.product.ProductDTO;
-import generator.domain.product.ProductVO;
-import generator.domain.response.Result;
-import generator.domain.seckill.SeckillActivityDTO;
-import generator.domain.statistics.Statistics;
+import domain.entity.SeckillActivity;
+import domain.entity.User;
+import domain.order.OrderPageVO;
+import domain.product.ProductDTO;
+import domain.product.ProductVO;
+import domain.response.Result;
+import domain.seckill.SeckillActivityDTO;
+import domain.statistics.Statistics;
 
 public interface AdminService extends IService<User> {
     Result<ProductVO> addProducts(Long userId, ProductDTO productDTO);

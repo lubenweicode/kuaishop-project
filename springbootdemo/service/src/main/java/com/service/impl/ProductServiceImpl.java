@@ -7,11 +7,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.repository.mapper.ProductMapper;
 import com.service.ProductService;
-import generator.domain.entity.Product;
-import generator.domain.entity.ProductCategory;
-import generator.domain.product.ProductListVO;
-import generator.domain.product.ProductPageDTO;
-import generator.domain.response.Result;
+import domain.entity.Product;
+import domain.entity.ProductCategory;
+import domain.product.ProductListVO;
+import domain.product.ProductPageDTO;
+import domain.response.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -68,8 +68,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         }
 
         // 3.根据ID列表查询单个商品缓存,批量获取提升效率
-        List<Product> productList = new ArrayList<>();
-        List<Long> unHitProductIdList = new ArrayList<>();
+        List<Product> productList = new ArrayList<>(); // 批量查询结果
+        List<Long> unHitProductIdList = new ArrayList<>(); // 未命中商品ID列表
 
         if (!CollectionUtils.isEmpty(productIdList)) {
             // 3.1 构建单个商品缓存键列表,批量查询Redis

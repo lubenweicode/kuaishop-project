@@ -87,7 +87,7 @@ jwt:
   expire: 604800 # 过期时间
   sign-key: uNivjsEvr9aUNhpKahuChoGmsjaOdYSB   # 密钥（≥32字符）
   interceptor:
-    enable: true # 生产环境开启
+    enable: false # 生产环境开启
 
 rate-limit:
   interceptor:

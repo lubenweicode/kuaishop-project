@@ -3,7 +3,7 @@ package com.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.repository.mapper.AuthMapper;
-import generator.domain.entity.User;
+import domain.entity.User;
 import org.springframework.stereotype.Service;
 
 /**

@@ -1,10 +1,10 @@
 package com.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import generator.domain.cart.CartAddItem;
-import generator.domain.cart.CartItemVO;
-import generator.domain.entity.Cart;
-import generator.domain.response.Result;
+import domain.cart.CartAddItem;
+import domain.cart.CartItemVO;
+import domain.entity.Cart;
+import domain.response.Result;
 
 import java.util.List;
 

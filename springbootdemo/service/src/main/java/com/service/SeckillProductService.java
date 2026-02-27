@@ -1,7 +1,7 @@
 package com.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import generator.domain.entity.SeckillProduct;
+import domain.entity.SeckillProduct;
 
 /**
  * @author 1569157760

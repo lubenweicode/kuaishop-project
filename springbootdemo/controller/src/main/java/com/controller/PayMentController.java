@@ -1,9 +1,9 @@
 package com.controller;
 
 import com.service.PayMentService;
-import generator.domain.context.UserContext;
-import generator.domain.payment.PayMentDTO;
-import generator.domain.response.Result;
+import domain.context.UserContext;
+import domain.payment.PayMentDTO;
+import domain.response.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,11 +1,11 @@
 package com.controller;
 
 import com.service.OrderService;
-import generator.domain.context.UserContext;
-import generator.domain.order.OrderCreateDTO;
-import generator.domain.order.OrderPageVO;
-import generator.domain.order.OrderVO;
-import generator.domain.response.Result;
+import domain.context.UserContext;
+import domain.order.OrderCreateDTO;
+import domain.order.OrderPageVO;
+import domain.order.OrderVO;
+import domain.response.Result;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

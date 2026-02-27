@@ -26,7 +26,8 @@ public class AdminConstants {
     // 用户名格式错误
     public static final int USERNAME_FORMAT_ERROR = 4005;
     public static final String MSG_USERNAME_FORMAT_ERROR_MESSAGE = "用户名格式错误";
-    public static final String USERNAME_REGEX = "^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z0-9!@#$%^&*()_+-=]{6,20}$";
+    // 用户名格式  3-20字符（字母、数字、下划线）
+    public static final String USERNAME_REGEX = "^[a-zA-Z0-9_\\u4e00-\\u9fa5]{3,20}$";
 
     // 用户名/手机号/邮箱已存在
     public static final Integer USERNAME_PHONE_EMAIL_EXIST = 4007;

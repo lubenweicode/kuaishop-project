@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.repository.mapper.AddressMapper;
 import com.service.AddressService;
-import generator.domain.address.AddressDTO;
-import generator.domain.entity.Address;
-import generator.domain.response.Result;
+import domain.address.AddressDTO;
+import domain.entity.Address;
+import domain.response.Result;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 

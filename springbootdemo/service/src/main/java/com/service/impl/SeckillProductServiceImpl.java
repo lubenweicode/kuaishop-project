@@ -3,7 +3,7 @@ package com.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.repository.mapper.SeckillProductMapper;
 import com.service.SeckillProductService;
-import generator.domain.entity.SeckillProduct;
+import domain.entity.SeckillProduct;
 import org.springframework.stereotype.Service;
 
 /**
