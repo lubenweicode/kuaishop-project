@@ -1,0 +1,277 @@
+/* 轻量胶囊主题 - 色彩系统 */
+:root {
+  /* 主色调 */
+  --color-black: #2a2a2a;           /* 哑光黑 */
+  --color-white: #fffff0;           /* 象牙白 */
+  --color-beige: #f3e9e0;           /* 低饱和裸粉 */
+  
+  /* 补助色 */
+  --color-gold: #d4af37;            /* 轻金色 */
+  --color-gold-light: #e8d9c4;      /* 浅金色 */
+  --color-gray-light: #f5f3f0;      /* 极浅灰 */
+  --color-gray-medium: #d1c9c0;     /* 中灰 */
+  --color-gray-dark: #8a8077;       /* 深灰 */
+  
+  /* 功能色 */
+  --color-success: #8b9a7a;         /* 成功 - 温和绿 */
+  --color-warning: #c9a876;         /* 警告 - 温和金 */
+  --color-error: #a88379;           /* 错误 - 温和红棕 */
+  --color-info: #7a9ab3;            /* 信息 - 温和蓝 */
+  
+  /* 间距 */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+  --spacing-2xl: 32px;
+  --spacing-3xl: 48px;
+  
+  /* 圆角（胶囊风格） */
+  --radius-capsule: 16px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  
+  /* 阴影（极简化） */
+  --shadow-sm: 0 1px 2px rgba(42, 42, 42, 0.08);
+  --shadow-md: 0 2px 4px rgba(42, 42, 42, 0.12);
+  --shadow-lg: 0 4px 8px rgba(42, 42, 42, 0.15);
+  
+  /* 边框 */
+  --border-thin: 1px solid var(--color-gold);
+  --border-light: 1px solid var(--color-gray-light);
+  
+  /* 过渡 */
+  --transition-fast: 180ms ease-out;
+  --transition-normal: 300ms ease-out;
+  --transition-slow: 500ms ease-out;
+  
+  /* 字体 */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-size-xs: 12px;
+  --font-size-sm: 13px;
+  --font-size-base: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 20px;
+  --font-size-3xl: 24px;
+}
+
+/* 全局样式重置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background-color: var(--color-white);
+  color: var(--color-black);
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-white);
+  color: var(--color-black);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 胶囊按钮基础样式 */
+.btn-capsule {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: none;
+  border-radius: var(--radius-capsule);
+  background-color: var(--color-black);
+  color: var(--color-white);
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  white-space: nowrap;
+  outline: none;
+}
+
+.btn-capsule:hover {
+  background-color: var(--color-beige);
+  color: var(--color-black);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-capsule:active {
+  transform: scale(0.98);
+}
+
+.btn-capsule-outline {
+  background-color: transparent;
+  border: 1px solid var(--color-black);
+  color: var(--color-black);
+}
+
+.btn-capsule-outline:hover {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+/* 胶囊卡片 */
+.capsule-card {
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-capsule);
+  background-color: var(--color-white);
+  border: var(--border-light);
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-sm);
+}
+
+.capsule-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-gray-medium);
+}
+
+.capsule-card-elevated {
+  box-shadow: var(--shadow-md);
+  border: none;
+}
+
+/* 胶囊输入框 */
+.capsule-input {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-capsule);
+  border: var(--border-light);
+  background-color: var(--color-white);
+  color: var(--color-black);
+  font-size: var(--font-size-base);
+  font-family: inherit;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.capsule-input:focus {
+  border-color: var(--color-gold);
+  box-shadow: inset 0 0 0 2px rgba(212, 175, 55, 0.1);
+}
+
+.capsule-input::placeholder {
+  color: var(--color-gray-dark);
+}
+
+/* 胶囊标签 */
+.capsule-tag {
+  display: inline-block;
+  padding: 4px var(--spacing-md);
+  border-radius: 12px;
+  background-color: var(--color-gray-light);
+  color: var(--color-black);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+}
+
+/* 黄金分割线 */
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    var(--color-gold) 10%, 
+    var(--color-gold) 90%, 
+    transparent 100%);
+  margin: var(--spacing-xl) 0;
+}
+
+/* 留白布局 - 至少60% */
+.spacious-layout {
+  padding: var(--spacing-3xl);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* 媒体查询 - 响应式 */
+@media (max-width: 768px) {
+  :root {
+    --spacing-lg: 12px;
+    --spacing-xl: 16px;
+    --spacing-2xl: 24px;
+    --spacing-3xl: 32px;
+  }
+  
+  .spacious-layout {
+    padding: var(--spacing-2xl);
+  }
+}
+
+/* 轻微缩放动画（胶囊滑动） */
+@keyframes capsuleScale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 轻推收纳动画 */
+@keyframes softPush {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animation-soft-push {
+  animation: softPush var(--transition-normal) ease-out;
+}
+
+/* 哑光金属拉丝效果 */
+.metallic-brush {
+  position: relative;
+  overflow: hidden;
+}
+
+.metallic-brush::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(212, 175, 55, 0.15) 50%,
+    transparent 100%);
+  transition: left var(--transition-normal);
+  pointer-events: none;
+}
+
+.metallic-brush:hover::after {
+  left: 100%;
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-white);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-gray-medium);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gray-dark);
+}
