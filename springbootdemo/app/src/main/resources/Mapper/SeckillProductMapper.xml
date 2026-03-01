@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.SeckillProductMapper">
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO seckill_product(
+        activity_id,
+        product_id,
+        product_name,
+        seckill_price,
+        original_price,
+        total_stock,
+        surplus_stock, <!-- 新增 -->
+        sold,           <!-- 新增 -->
+        limit_per_user
+        ) VALUES
+        <foreach item="item" index="index" collection="list" separator=",">
+            (
+            #{item.activityId},
+            #{item.productId},
+            #{item.productName},
+            #{item.seckillPrice},
+            #{item.originalPrice},
+            #{item.totalStock},
+            #{item.surplusStock}, <!-- 剩余库存 -->
+            #{item.sold},         <!-- 已售数量 -->
+            #{item.limitPerUser}
+            )
+        </foreach>
+    </insert>
+
+
+</mapper>
